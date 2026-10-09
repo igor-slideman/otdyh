@@ -7,143 +7,187 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Отдых">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#F4F0E9" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1A1917" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FBF5E6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16151D" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@900&family=Onest:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <title>Отдых</title>
 <style>
 :root{
-  --bg:#F4F0E9; --card:#FFFDF9; --ink:#24221F; --muted:#8C857B; --line:#E6E0D6; --soft:#ECE6DC;
-  --accent:#5E7D6A; --accent-ink:#fff; --warn:#A8553A; --warn-bg:#F6E6DE;
-  --physical:#C07A5A; --emotional:#B46F86; --social:#BF9447; --cognitive:#5C80A4; --creative:#8A74AE;
-  --r:18px;
-}
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#1A1917; --card:#24221F; --ink:#EEE9E1; --muted:#9A938A; --line:#35322D; --soft:#2E2B27;
-    --accent:#86A893; --accent-ink:#14201A; --warn:#E39A7F; --warn-bg:#3A2A23;
-    --physical:#D99577; --emotional:#D08AA2; --social:#D6AE63; --cognitive:#82A5C8; --creative:#A893CA;
-  }
+  --bg:#FBF5E6; --paper:#FFFDF7; --ink:#1D1B18; --muted:#6E685E; --track:#ECE6D8;
+  --accent:#5D5BD4; --accent-soft:#C9C7F4; --pink:#EF8DB4; --yellow:#F6CB55;
+  --physical:#F7A982; --emotional:#EF8DB4; --social:#F6CB55; --cognitive:#86B6F2; --creative:#93D6AE;
+  --bw:2.5px; --r:26px; --line:var(--ink); --shadow:var(--ink); --on-c:#1D1B18; --accent-text:var(--accent); --glow:#FBE3A8;
+  --sh:6px 6px 0 var(--shadow); --sh-s:4px 4px 0 var(--shadow);
+  --sans:"Onest",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --round:"Nunito","Onest",sans-serif; --hand:"Caveat","Onest",cursive;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink)}
-body{font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased; padding:env(safe-area-inset-top) 0 0; min-height:100vh}
+body{font:17px/1.45 var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh;
+  padding-top:env(safe-area-inset-top);
+  background:radial-gradient(120% 50% at 100% 0%, var(--glow) 0%, transparent 55%) no-repeat, var(--bg)}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 textarea,input{font:inherit;color:inherit}
-.wrap{max-width:520px;margin:0 auto;padding:12px 16px calc(96px + env(safe-area-inset-bottom))}
+.wrap{max-width:520px;margin:0 auto;padding:10px 20px calc(120px + env(safe-area-inset-bottom))}
 
-/* header */
-.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 4px}
-.top h1{font-size:28px;line-height:1.15;letter-spacing:-.02em;margin:0;font-weight:700}
-.sub{color:var(--muted);font-size:15px;margin:2px 0 0}
-.nav{display:flex;gap:4px}
-.icon-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--ink)}
-.icon-btn:disabled{opacity:.3}
-.icon-btn svg{width:18px;height:18px}
+/* ---------- header ---------- */
+.bar{display:flex;align-items:center;justify-content:space-between;padding:14px 0 6px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:26px;letter-spacing:-.02em}
+.logo{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center}
+.logo svg{width:26px;height:26px}
+.hand-link{font:700 24px/1 var(--hand);color:var(--accent-text);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
 
-h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:26px 4px 10px}
+/* ---------- hero ---------- */
+.hero{display:flex;align-items:center;gap:10px;margin:14px 0 6px}
+.mascot{width:118px;flex:none}
+.bubble{position:relative;background:var(--paper);border:var(--bw) solid var(--line);border-radius:26px;padding:14px 18px;
+  box-shadow:var(--sh-s);font-size:16px;line-height:1.35;flex:1}
+.bubble:before{content:"";position:absolute;left:-11px;top:50%;width:18px;height:18px;background:var(--paper);
+  border-left:var(--bw) solid var(--line);border-bottom:var(--bw) solid var(--line);transform:translateY(-50%) rotate(45deg);border-radius:0 0 0 5px}
+h1{font-size:46px;line-height:1;letter-spacing:-.045em;font-weight:900;margin:18px 0 0}
+h1 .acc{font-family:var(--round);color:var(--accent-text);letter-spacing:-.03em;font-weight:900}
+.lead{color:var(--muted);font-size:17px;margin:12px 0 0}
+.pills{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:var(--bw) solid var(--line);border-radius:999px;
+  background:var(--paper);font-weight:600;font-size:16px;transition:transform .1s, box-shadow .1s}
+.pill:disabled{opacity:.35}
+.pill.solid{background:var(--accent);color:#fff}
+.pill:active:not(:disabled){transform:translate(2px,2px)}
 
-/* cards */
-.card{background:var(--card);border-radius:var(--r);padding:14px 16px;border:1px solid var(--line)}
-.stack{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin:34px 2px 14px}
 
-.type{position:relative;text-align:left;width:100%;display:block;transition:border-color .2s, box-shadow .2s}
-.type .row{display:flex;align-items:center;gap:10px}
-.dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--c)}
-.type .name{font-weight:600;font-size:17px;flex:1}
-.check{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;flex:none;transition:all .2s}
-.check svg{width:14px;height:14px;opacity:0}
-.type .sym{color:var(--muted);font-size:14px;margin:6px 0 0 20px}
-.type.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c) inset}
-.type.on .check{background:var(--c);border-color:var(--c);color:#fff}
-.type.on .check svg{opacity:1}
+/* ---------- cards ---------- */
+.card{background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+.stack{display:flex;flex-direction:column;gap:14px}
+.pad{padding:18px 20px}
 
-.scale{display:none;margin:12px 0 2px 20px}
+.type{text-align:left;width:100%;padding:16px 18px;background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r);
+  transition:transform .15s, box-shadow .15s, background .15s;cursor:pointer}
+.type .row{display:flex;align-items:center;gap:12px}
+.swatch{width:16px;height:16px;border-radius:50%;flex:none;background:var(--c);border:2px solid var(--line)}
+.type .name{font-weight:800;font-size:19px;letter-spacing:-.01em;flex:1}
+.tick{width:28px;height:28px;border-radius:50%;border:var(--bw) solid var(--line);display:grid;place-items:center;flex:none;background:var(--paper)}
+.tick svg{width:15px;height:15px;opacity:0}
+.type .sym{color:var(--muted);font-size:15px;margin:6px 0 0 28px;line-height:1.4}
+.type.on{background:var(--c);color:var(--on-c);box-shadow:var(--sh);transform:translate(-2px,-2px)}
+.type.on .sym{color:var(--on-c)}
+.type.on .swatch{border-color:var(--on-c)}
+.type.on .tick{border-color:var(--on-c)}
+.type.on .tick{background:var(--on-c);color:#fff}
+.type.on .tick svg{opacity:1}
+
+.scale{display:none;margin:14px 0 2px 28px}
 .type.on .scale{display:block}
-.scale-l{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
-.seg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.seg button{height:36px;border-radius:10px;background:var(--soft);font-weight:600;font-size:15px;color:var(--muted)}
-.seg button.on{background:var(--c);color:#fff}
+.scale-l{display:flex;justify-content:space-between;font:700 19px/1 var(--hand);margin-bottom:8px}
+.seg{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.seg button{height:40px;border-radius:999px;background:var(--paper);border:2px solid var(--line);font-weight:800;font-size:16px}
+.seg button.on{background:var(--ink);color:var(--paper)}
+.type.on .seg button{background:#FFFDF7;border-color:var(--on-c);color:var(--on-c)}
+.type.on .seg button.on{background:var(--on-c);color:#fff}
 
-/* recs */
-.group{padding:6px 0}
-.group-h{display:flex;align-items:center;gap:8px;padding:10px 16px 2px}
-.group-h b{font-size:15px}
-.hint{color:var(--muted);font-size:14px;padding:2px 16px 8px 34px}
-.rec{border-top:1px solid var(--line);padding:12px 16px}
-.rec-main{display:flex;align-items:center;gap:12px;width:100%;text-align:left}
-.box{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--line);display:grid;place-items:center;flex:none;transition:all .15s}
-.box svg{width:14px;height:14px;opacity:0}
-.rec.done .box{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+/* ---------- recs ---------- */
+.group-h{display:flex;align-items:center;gap:10px;padding:18px 20px 2px}
+.group-h b{font-size:18px;font-weight:800;letter-spacing:-.01em}
+.hint{font:700 21px/1.15 var(--hand);color:var(--accent-text);padding:6px 20px 12px 46px}
+.rec{border-top:2px dashed var(--line);padding:14px 20px}
+.rec-main{display:flex;align-items:center;gap:14px;width:100%;text-align:left}
+.box{width:28px;height:28px;border-radius:9px;border:var(--bw) solid var(--line);display:grid;place-items:center;flex:none;background:var(--paper);transition:background .12s}
+.box svg{width:16px;height:16px;opacity:0}
+.rec.done .box{background:var(--accent);color:#fff}
 .rec.done .box svg{opacity:1}
-.rec-t{flex:1}
-.del{color:var(--muted);font-size:13px;padding:4px}
-.chips{display:flex;gap:6px;margin:10px 0 0 36px;flex-wrap:wrap}
-.chip{padding:6px 12px;border-radius:999px;background:var(--soft);font-size:14px;color:var(--ink)}
-.chip.on.yes{background:var(--accent);color:var(--accent-ink)}
-.chip.on.partly{background:var(--social);color:#fff}
-.chip.on.no{background:var(--muted);color:var(--bg)}
-.chip-q{font-size:13px;color:var(--muted);align-self:center;margin-right:2px}
-.add{border-top:1px solid var(--line);padding:8px 16px 10px}
-.add input{width:100%;border:0;background:transparent;padding:6px 0;font-size:16px;outline:none}
-.add input::placeholder{color:var(--muted)}
+.rec-t{flex:1;font-weight:500}
+.del{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);font-size:13px;font-weight:700;flex:none}
+.chips{display:flex;gap:8px;margin:12px 0 0 42px;flex-wrap:wrap}
+.chip{padding:6px 12px;border-radius:999px;border:2px solid var(--line);background:var(--paper);font-size:14px;font-weight:600}
+.chip.on.yes{background:var(--accent);color:#fff}
+.chip.on.partly{background:var(--yellow);color:var(--on-c)}
+.chip.on.no{background:var(--ink);color:var(--paper)}
+.add{border-top:2px dashed var(--line);padding:10px 20px 14px}
+.add input{width:100%;border:0;background:transparent;padding:6px 0;font:700 22px/1.2 var(--hand);color:var(--accent-text);outline:none}
+.add input::placeholder{color:var(--accent-text);opacity:.8}
 
-textarea{width:100%;border:0;background:transparent;resize:none;min-height:64px;outline:none;font-size:16px}
+textarea{width:100%;border:0;background:transparent;resize:none;min-height:70px;outline:none;font-size:17px}
 textarea::placeholder{color:var(--muted)}
 
-.note{border-radius:var(--r);padding:14px 16px;font-size:15px}
-.note.warn{background:var(--warn-bg);color:var(--ink);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent)}
-.note.warn b{color:var(--warn)}
-.note.calm{background:var(--soft)}
-.note .act{margin-top:10px;font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
-.empty{color:var(--muted);font-size:15px;text-align:center;padding:18px 8px}
+/* ---------- notes ---------- */
+.note{border:var(--bw) solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:22px 22px}
+.note h3{margin:0 0 8px;font-size:22px;line-height:1.15;font-weight:800;letter-spacing:-.02em}
+.note p{margin:0;font-size:17px}
+.note.warn{background:var(--pink);color:var(--on-c)}
+.note.all{background:var(--yellow);color:var(--on-c)}
+.note .pill{margin-top:16px;background:#FFFDF7;color:var(--on-c);border-color:var(--on-c)}
+.note{border-color:var(--line)}
+.dashed{border:var(--bw) dashed var(--line);border-radius:24px;padding:18px 20px;display:flex;gap:16px;align-items:center}
+.dashed .ic{width:52px;height:52px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;flex:none}
+.dashed .ic svg{width:26px;height:26px}
+.dashed b{display:block;font-size:17px;margin-bottom:2px}
+.dashed .hand{font:700 23px/1.15 var(--hand);color:var(--accent-text)}
 
 /* rating prompt */
-.ask .q{font-weight:600;margin-bottom:4px}
-.ask .when{color:var(--muted);font-size:14px;margin-bottom:6px}
-.ask .rec{padding:10px 0}
+.ask .rec:first-of-type{border-top:0}
 .ask .chips{margin-left:0}
 
-/* history */
+/* ---------- history ---------- */
 .heat{display:grid;grid-template-columns:auto repeat(14,1fr);gap:4px;align-items:center}
-.heat .lbl{font-size:12px;color:var(--muted);padding-right:6px;white-space:nowrap}
-.cell{aspect-ratio:1;border-radius:5px;background:var(--soft)}
-.dayn{font-size:10px;color:var(--muted);text-align:center}
-.dayn.today{color:var(--ink);font-weight:700}
-.colbtn{display:contents}
-.stat{padding:10px 0;border-top:1px solid var(--line)}
-.stat:first-of-type{border-top:0}
-.stat-top{display:flex;justify-content:space-between;gap:10px;font-size:15px}
-.stat-top span:last-child{color:var(--muted);font-size:13px;white-space:nowrap}
-.bar{height:6px;border-radius:3px;background:var(--soft);margin-top:7px;overflow:hidden}
-.bar i{display:block;height:100%;border-radius:3px;background:var(--c)}
-.few{opacity:.55}
+.heat .lbl{font-size:13px;font-weight:700;padding-right:6px;white-space:nowrap}
+.cell{aspect-ratio:1;border-radius:6px;background:var(--track)}
+.cell.f{border:1.5px solid var(--line)}
+.dayn{font-size:11px;color:var(--muted);text-align:center;font-weight:600}
+.dayn.today{color:var(--accent-text);font-weight:900}
+.stat{padding:14px 0;border-top:2px dashed var(--line)}
+.stat:first-of-type{border-top:0;padding-top:6px}
+.stat-top{display:flex;justify-content:space-between;gap:12px;font-size:16px;font-weight:500}
+.stat-top span:last-child{font-weight:800;white-space:nowrap}
+.bar-t{height:12px;border-radius:999px;background:var(--track);margin-top:9px;overflow:hidden}
+.bar-t i{display:block;height:100%;border-radius:999px;background:var(--c);border-right:2px solid var(--line)}
+.bar-t i[style*="width:0%"]{border:0}
+.few{opacity:.5}
+.foot{font:700 21px/1.2 var(--hand);color:var(--accent-text);margin:14px 4px 0}
+.empty{text-align:center;padding:8px 10px}
+.empty .hand{font:700 24px/1.2 var(--hand);color:var(--accent-text)}
 
-/* settings sheet */
-.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;z-index:20}
-.sheet{position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;background:var(--bg);border-radius:22px 22px 0 0;
-  padding:18px 16px calc(24px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .28s ease;z-index:21;max-height:88vh;overflow:auto}
-.sheet.open{transform:none}
+/* ---------- settings sheet ---------- */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:20}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;background:var(--bg);
+  border:var(--bw) solid var(--line);border-bottom:0;border-radius:30px 30px 0 0;
+  padding:22px 20px calc(26px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .28s ease;z-index:21;max-height:90vh;overflow:auto}
+.sheet{visibility:hidden}
+.sheet.open{transform:none;visibility:visible}
 .sheet-bg.open{display:block}
-.sheet h3{margin:4px 4px 14px;font-size:20px}
-.set-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
-.set-row:first-child{border-top:0}
-.stepper{display:flex;align-items:center;gap:8px}
-.stepper button{width:32px;height:32px;border-radius:50%;background:var(--soft);font-size:18px}
-.stepper b{min-width:22px;text-align:center}
-.btn{display:block;width:100%;padding:13px;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-weight:600;text-align:center}
-.btn.ghost{background:var(--soft);color:var(--ink)}
-.small{font-size:13px;color:var(--muted);line-height:1.45}
+.sheet h2{margin:0;font-size:34px;font-weight:900;letter-spacing:-.04em}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 0;border-top:2px dashed var(--line);font-size:16px;font-weight:500}
+.set-row:first-child{border-top:0;padding-top:0}
+.set-row:last-child{padding-bottom:0}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);background:var(--paper);font-size:20px;font-weight:700;line-height:1}
+.stepper b{min-width:24px;text-align:center;font-size:18px;font-weight:900}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border-radius:999px;border:var(--bw) solid var(--line);
+  background:var(--accent);color:#fff;font-weight:800;font-size:17px;box-shadow:var(--sh-s);transition:transform .1s, box-shadow .1s}
+.btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--shadow)}
+.btn.ghost{background:var(--paper);color:var(--ink)}
+.small{font-size:14px;color:var(--muted);line-height:1.45;margin:10px 4px 0}
 
-/* tab bar */
-.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:4px;
-  padding:8px 16px calc(8px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 82%,transparent);
-  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--line);z-index:10}
-.tab{flex:1;max-width:200px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);padding:4px}
-.tab svg{width:24px;height:24px}
-.tab.on{color:var(--accent)}
+/* ---------- tab bar ---------- */
+.tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));display:flex;gap:4px;
+  padding:5px;background:var(--paper);border:var(--bw) solid var(--line);border-radius:999px;box-shadow:var(--sh-s);z-index:10}
+.tab{display:flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-weight:700;font-size:16px;white-space:nowrap}
+.tab svg{width:20px;height:20px}
+.tab.on{background:var(--accent);color:#fff}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#16151D; --paper:#22202C; --ink:#F2ECE0; --muted:#A39DB0; --track:#34313F;
+    --line:#F2ECE0; --shadow:#6E6BEA; --accent:#6462E0; --accent-text:#A9A7FF; --glow:#2B2856;
+  }
+  .type.on{box-shadow:6px 6px 0 var(--line)}
+  .note{box-shadow:6px 6px 0 var(--line)}
+  .mascot .shade{fill:#3B3A9E}
+}
 
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
@@ -151,8 +195,8 @@ textarea::placeholder{color:var(--muted)}
 <body>
 <div class="wrap" id="app"></div>
 <nav class="tabs">
-  <button class="tab" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Вечер</button>
-  <button class="tab" data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Что помогает</button>
+  <button class="tab" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Вечер</button>
+  <button class="tab" data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>Что помогает</button>
 </nav>
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet" id="sheet"></div>
@@ -164,28 +208,28 @@ textarea::placeholder{color:var(--muted)}
 const TYPES = [
   { id:'physical', short:'Физ.', name:'Физическая', color:'var(--physical)',
     sym:'Сонливость, вялость, тяжесть, мышечное напряжение, скованность, головная боль',
-    hint:'Недосып — нужен сон. Засиделся — мягкое движение, а не диван.',
-    who:'врачу', whoFull:'стоит обратиться к врачу',
+    hint:'недосып — нужен сон. засиделся — мягкое движение, а не диван.',
+    whoFull:'стоит обратиться к врачу',
     recs:[['sleep','Лечь спать раньше'],['stretch','Лёгкая растяжка'],['walk','Неспешная прогулка'],['shower','Тёплый душ'],['massage','Массаж']] },
   { id:'emotional', short:'Эмоц.', name:'Эмоциональная', color:'var(--emotional)',
     sym:'Раздражительность или замкнутость, легко расплакаться, «всё, больше не могу» из‑за мелочи',
-    hint:'Не отвлекай себя развлечениями — дай эмоции место.',
-    who:'психотерапевту', whoFull:'стоит обсудить с психотерапевтом',
+    hint:'не отвлекай себя развлечениями — дай эмоции место.',
+    whoFull:'стоит обсудить с психотерапевтом',
     recs:[['name','Назвать эмоцию и что её вызвало'],['write','Записать мысли'],['talk','Поговорить с близким'],['silence','Побыть в тишине']] },
   { id:'social', short:'Соц.', name:'Социальная', color:'var(--social)',
     sym:'Не хочется никого видеть, отвечать на сообщения, рассказывать, как прошёл день',
-    hint:'Важно не сколько людей, а какой контакт сейчас нужен.',
-    who:'психотерапевту', whoFull:'стоит обсудить с психотерапевтом',
+    hint:'важно не сколько людей, а какой контакт сейчас нужен.',
+    whoFull:'стоит обсудить с психотерапевтом',
     recs:[['alone','Побыть одному'],['chats','Отключить чаты и уведомления'],['boundary','Сказать «сегодня не могу, давай завтра»'],['quietwalk','Молча погулять с близким']] },
   { id:'cognitive', short:'Умств.', name:'Умственная', color:'var(--cognitive)',
     sym:'Перечитываешь абзац по три раза, не понимаешь письма, ошибки в простом',
-    hint:'Устаёшь от переключений. Нужно что-то одно, без экрана.',
-    who:'психотерапевту', whoFull:'стоит обсудить с психотерапевтом',
+    hint:'устаёшь от переключений. нужно что-то одно, без экрана.',
+    whoFull:'стоит обсудить с психотерапевтом',
     recs:[['nature','30 минут на природе'],['noscreen','Вечер без экрана'],['monotone','Монотонное дело без подкаста (готовка, уборка)'],['move','Простая физическая активность']] },
   { id:'creative', short:'Творч.', name:'Творческая', color:'var(--creative)',
     sym:'«Ничего не могу придумать», страх, что выдохся, не радует любимое дело',
-    hint:'Переключиться с «должен создать ценное» на «просто делаю».',
-    who:'психотерапевту', whoFull:'стоит обсудить с психотерапевтом',
+    hint:'переключиться с «должен создать ценное» на «просто делаю».',
+    whoFull:'стоит обсудить с психотерапевтом',
     recs:[['aimless','Рисовать или играть без цели'],['read','Почитать не по работе'],['hands','Сделать что-то руками'],['puzzle','Пазл или настольная игра'],['permission','Разрешить себе сегодня ничего не создавать']] },
 ];
 const T = Object.fromEntries(TYPES.map(t => [t.id, t]));
@@ -198,7 +242,7 @@ const DEFAULTS = { version:1, days:{}, custom:{}, settings:{ windowDays:14, minD
 let S = load();
 function load(){
   try{ const raw = localStorage.getItem(KEY); if(raw){ const d = JSON.parse(raw); return { ...DEFAULTS, ...d, settings:{ ...DEFAULTS.settings, ...(d.settings||{}) } }; } }catch(e){}
-  return structuredClone(DEFAULTS);
+  return JSON.parse(JSON.stringify(DEFAULTS));
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch(e){}
@@ -220,6 +264,7 @@ const peek = k => S.days[k];
 const recsOf = id => [...T[id].recs.map(([rid, text]) => ({ key:`${id}.${rid}`, text })), ...(S.custom[id]||[]).map(c => ({ key:`${id}.c.${c.id}`, text:c.text, custom:true }))];
 const recText = key => { const [id] = key.split('.'); const r = recsOf(id).find(r => r.key === key); return r ? r.text : '—'; };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const plural = (n,a,b,c) => { const m=n%10, h=n%100; return m===1&&h!==11?a:(m>=2&&m<=4&&(h<10||h>=20))?b:c; };
 
 function unratedBefore(k){
   for(let i=1;i<=3;i++){
@@ -249,7 +294,7 @@ function signals(){
 
 function stats(){
   const res = {};
-  for(const [k,d] of Object.entries(S.days)){
+  for(const d of Object.values(S.days)){
     for(const [key,a] of Object.entries(d.actions)){
       const id = key.split('.')[0];
       if(!a.done || !d.types[id]) continue;
@@ -260,118 +305,152 @@ function stats(){
   return res;
 }
 
-/* ---------- Иконки ---------- */
+/* ---------- Графика ---------- */
 const I = {
-  tick:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
-  left:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
-  right:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
-  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  tick:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  moon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 14.6A7.6 7.6 0 0 1 9.4 4.5a7.6 7.6 0 1 0 10.1 10.1z"/></svg>',
+  heart:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.5s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.9c0 5.6-7.5 10-7.5 10z"/></svg>',
 };
+// Свой маскот: сонное облачко
+function mascot(mood){
+  const eyes = mood === 'worry'
+    ? '<circle cx="47" cy="70" r="4.2" fill="#1D1B18"/><circle cx="73" cy="70" r="4.2" fill="#1D1B18"/><path d="M40 63l11-5M80 63l-11-5" stroke="#1D1B18" stroke-width="3" stroke-linecap="round"/>'
+    : '<path d="M41 69q6 6 12 0M67 69q6 6 12 0" fill="none" stroke="#1D1B18" stroke-width="3.6" stroke-linecap="round"/>';
+  const mouth = mood === 'worry' ? '<path d="M55 86q5-4 10 0" fill="none" stroke="#1D1B18" stroke-width="3.4" stroke-linecap="round"/>'
+                                 : '<path d="M54 83q6 6 12 0" fill="none" stroke="#1D1B18" stroke-width="3.4" stroke-linecap="round"/>';
+  return `<svg class="mascot" viewBox="0 0 130 120" aria-hidden="true">
+    <g fill="#5D5BD4">
+      <circle cx="38" cy="58" r="22"/><circle cx="64" cy="44" r="28"/><circle cx="90" cy="58" r="21"/>
+      <rect x="16" y="56" width="96" height="46" rx="23"/>
+    </g>
+    <ellipse class="shade" cx="64" cy="96" rx="34" ry="5" fill="#4847B8" opacity=".5"/>
+    <ellipse cx="38" cy="80" rx="7" ry="4.5" fill="#EF8DB4" opacity=".85"/><ellipse cx="88" cy="80" rx="7" ry="4.5" fill="#EF8DB4" opacity=".85"/>
+    ${eyes}${mouth}
+    ${mood === 'worry' ? '' : '<path d="M101 18h9l-9 11h9M114 6h6l-6 7h6" fill="none" stroke="#EF8DB4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'}
+  </svg>`;
+}
 
 /* ---------- Отрисовка ---------- */
 let tab = 'today', view = logicalToday();
 const app = document.getElementById('app');
+const header = () => `<div class="bar"><div class="brand"><span class="logo">${I.moon}</span>отдых</div>
+  <button class="hand-link" data-act="settings">настройки ↓</button></div>`;
 
 function render(){
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
-  app.innerHTML = tab === 'today' ? renderToday() : renderHistory();
+  app.innerHTML = header() + (tab === 'today' ? renderToday() : renderHistory());
 }
 
 function chips(k, key, a){
   return `<div class="chips">${RATE.map(([v,l]) => `<button class="chip ${v} ${a.helped===v?'on':''}" data-act="rate" data-day="${k}" data-key="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
 }
 
+function bubbleText(k, d, sig, u, sel){
+  const t = logicalToday();
+  if(k !== t) return `это ${human(k)}. можно дополнить запись.`;
+  if(sig.length) return 'кажется, усталость не проходит. посмотри ниже ↓';
+  if(u) return 'привет! как там вчерашнее — помогло?';
+  if(sel.length >= 4) return 'ого, всё сразу. может, пора в отпуск?';
+  if(!sel.length) return 'привет! от чего ты сегодня устал?';
+  if(!Object.values(d.actions).some(a => a.done)) return 'отметь, что сделал для восстановления ↓';
+  return 'отдых — не лень, а обмен времени на энергию.';
+}
+
 function renderToday(){
   const t = logicalToday(), k = view, d = peek(k) || { types:{}, actions:{}, skip:'' };
   const sel = TYPES.filter(x => d.types[x.id]);
-  let h = `<div class="top"><div><h1>${relName(k)}</h1><p class="sub">${human(k)}</p></div>
-    <div class="nav"><button class="icon-btn" data-act="prev" aria-label="Предыдущий день">${I.left}</button>
-    <button class="icon-btn" data-act="next" aria-label="Следующий день" ${k>=t?'disabled':''}>${I.right}</button></div></div>`;
-
-  if(k === t){
-    for(const s of signals()){
-      const helped = s.rated ? ` Отдых помогал в ${Math.round(s.score/s.rated*100)}% оценённых случаев.` : '';
-      h += `<div class="note warn" style="margin-top:14px"><b>${s.type.name} усталость ${s.n} из последних ${s.w} дней</b> (сила ${S.settings.minIntensity}+). Устойчивого улучшения нет — ${s.type.whoFull}.${helped}
-        <div><button class="act" data-act="dismiss" data-id="${s.type.id}">Понятно, скрыть на неделю</button></div></div>`;
-    }
-  }
-
+  const sig = k === t ? signals() : [];
   const u = unratedBefore(k);
-  if(u){
-    h += `<h2>${u.k===addDays(k,-1)?'Вчера':human(u.k)} ты сделал</h2><div class="card ask"><div class="when">Помогло?</div>
-      ${u.list.map(([key,a]) => `<div class="rec" style="border-top:0"><div>${esc(recText(key))}</div>${chips(u.k,key,a)}</div>`).join('')}</div>`;
+
+  let h = `<div class="hero">${mascot(sig.length ? 'worry' : 'sleep')}<div class="bubble">${bubbleText(k, d, sig, u, sel)}</div></div>
+    <h1>${relName(k)},<br><span class="acc">${human(k)}.</span></h1>
+    <div class="pills"><button class="pill" data-act="prev">← раньше</button>
+    <button class="pill" data-act="next" ${k>=t?'disabled':''}>позже →</button>
+    ${k!==t?'<button class="pill solid" data-act="tonight">сегодня</button>':''}</div>`;
+
+  for(const s of sig){
+    const helped = s.rated ? ` Отдых помогал в ${Math.round(s.score/s.rated*100)}% оценённых случаев.` : '';
+    h += `<div class="note warn" style="margin-top:28px"><h3>${s.type.name} усталость: ${s.n} из ${s.w} дней</h3>
+      <p>Сила ${S.settings.minIntensity}+, устойчивого улучшения нет — ${s.type.whoFull}.${helped}</p>
+      <button class="pill" data-act="dismiss" data-id="${s.type.id}">Понятно, скрыть на неделю</button></div>`;
   }
 
-  h += `<h2>От чего устал?</h2><div class="stack">`;
+  if(u){
+    h += `<div class="eyebrow">${u.k===addDays(k,-1)?'Вчера':human(u.k)} ты сделал. Помогло?</div><div class="card ask pad" style="padding-top:4px;padding-bottom:6px">
+      ${u.list.map(([key,a]) => `<div class="rec" style="padding-left:0;padding-right:0"><div style="font-weight:600">${esc(recText(key))}</div>${chips(u.k,key,a)}</div>`).join('')}</div>`;
+  }
+
+  h += `<div class="eyebrow">От чего устал?</div><div class="stack">`;
   for(const x of TYPES){
     const v = d.types[x.id];
-    h += `<div class="card type ${v?'on':''}" style="--c:${x.color}" data-act="type" data-id="${x.id}" role="button">
-      <div class="row"><span class="dot"></span><span class="name">${x.name}</span><span class="check">${I.tick}</span></div>
+    h += `<div class="type ${v?'on':''}" style="--c:${x.color}" data-act="type" data-id="${x.id}" role="button">
+      <div class="row"><span class="swatch"></span><span class="name">${x.name}</span><span class="tick">${I.tick}</span></div>
       <div class="sym">${x.sym}</div>
-      <div class="scale"><div class="scale-l"><span>слабо</span><span>сильно</span></div>
+      <div class="scale"><div class="scale-l"><span>чуть-чуть</span><span>очень сильно</span></div>
       <div class="seg">${[1,2,3,4,5].map(n => `<button class="${v===n?'on':''}" data-act="lvl" data-id="${x.id}" data-n="${n}">${n}</button>`).join('')}</div></div></div>`;
   }
   h += `</div>`;
 
   if(sel.length >= 4){
-    h += `<div class="note calm" style="margin-top:12px"><b>Всё сразу.</b> Похоже, нужен не какой-то вид отдыха, а снижение нагрузки — или несколько дней без попытки быть эффективным.</div>`;
+    h += `<div class="note all" style="margin-top:22px"><h3>Всё сразу</h3><p>Похоже, нужен не какой-то вид отдыха, а снижение нагрузки — или несколько дней без попытки быть эффективным.</p></div>`;
   }
 
   if(sel.length){
-    h += `<h2>Что сделал для восстановления</h2><div class="stack">`;
+    h += `<div class="eyebrow">Что сделал для восстановления</div><div class="stack" style="gap:18px">`;
     for(const x of sel){
-      h += `<div class="card group" style="--c:${x.color};padding:0"><div class="group-h"><span class="dot"></span><b>${x.name}</b></div><div class="hint">${x.hint}</div>`;
+      h += `<div class="card" style="--c:${x.color}"><div class="group-h"><span class="swatch"></span><b>${x.name}</b></div><div class="hint">${x.hint}</div>`;
       for(const r of recsOf(x.id)){
         const a = d.actions[r.key] || {};
         h += `<div class="rec ${a.done?'done':''}"><div class="rec-main"><button class="rec-main" data-act="done" data-key="${r.key}"><span class="box">${I.tick}</span><span class="rec-t">${esc(r.text)}</span></button>${r.custom?`<button class="del" data-act="delc" data-key="${r.key}" aria-label="Удалить">✕</button>`:''}</div>
           ${a.done ? chips(k, r.key, a) : ''}</div>`;
       }
-      h += `<div class="add"><input data-act="addc" data-id="${x.id}" placeholder="+ Своё" enterkeyhint="done"></div></div>`;
+      h += `<div class="add"><input data-act="addc" data-id="${x.id}" placeholder="+ добавить своё" enterkeyhint="done"></div></div>`;
     }
     h += `</div>`;
+  } else {
+    h += `<div class="dashed" style="margin-top:22px"><span class="ic">${I.heart}</span><div><b>Рекомендации появятся здесь</b><span class="hand">отметь, что устало, — и я подскажу →</span></div></div>`;
   }
 
-  h += `<h2>Что я могу сегодня не делать?</h2><div class="card"><textarea data-act="skip" rows="2" placeholder="Необязательно">${esc(d.skip||'')}</textarea></div>`;
-  if(!sel.length) h += `<p class="empty">Отметь, что устало, — появятся рекомендации.</p>`;
+  h += `<div class="eyebrow">Что я могу сегодня не делать?</div><div class="card pad"><textarea data-act="skip" rows="2" placeholder="Необязательно. Одна строка — уже хорошо.">${esc(d.skip||'')}</textarea></div>`;
   return h;
 }
 
-const plural = (n,a,b,c) => { const m=n%10, h=n%100; return m===1&&h!==11?a:(m>=2&&m<=4&&(h<10||h>=20))?b:c; };
-const fmt = n => (Math.round(n*10)/10).toString().replace('.', ',');
-
 function renderHistory(){
   const t = logicalToday(), days = [...Array(14)].map((_,i) => addDays(t, i-13));
-  let h = `<div class="top"><div><h1>Что помогает</h1><p class="sub">Личная карта восстановления</p></div>
-    <button class="icon-btn" data-act="settings" aria-label="Настройки">${I.gear}</button></div>`;
+  let h = `<h1 style="margin-top:22px">Что <span class="acc">помогает.</span></h1>
+    <p class="lead">Твоя личная карта восстановления. Никакая «ванга» её не составит — только пробы и ошибки.</p>`;
 
-  h += `<h2>Последние 14 дней</h2><div class="card"><div class="heat">`;
+  h += `<div class="eyebrow">Последние 14 дней</div><div class="card pad"><div class="heat">`;
   for(const x of TYPES){
     h += `<span class="lbl">${x.short}</span>`;
-    for(const k of days){ const v = (peek(k)||{types:{}}).types[x.id]; h += `<button class="cell" data-act="open" data-day="${k}" style="${v?`background:${x.color};opacity:${.25+v*.15}`:''}" aria-label="${human(k)}"></button>`; }
+    for(const k of days){ const v = (peek(k)||{types:{}}).types[x.id]; h += `<button class="cell ${v?'f':''}" data-act="open" data-day="${k}" style="${v?`background:${x.color};opacity:${.5+v*.1}`:''}" aria-label="${human(k)}"></button>`; }
   }
   h += `<span></span>${days.map(k => `<span class="dayn ${k===t?'today':''}">${parse(k).getDate()}</span>`).join('')}</div></div>`;
 
-  // неделя
   const week = {}; for(let i=0;i<7;i++){ const d = peek(addDays(t,-i)); if(d) for(const id in d.types) week[id] = (week[id]||0)+1; }
   const top = Object.entries(week).sort((a,b) => b[1]-a[1]);
   if(top.length){
-    h += `<div class="note calm" style="margin-top:10px">За неделю чаще всего: <b>${top.slice(0,2).map(([id,n]) => `${T[id].name.toLowerCase()} (${n} дн.)`).join(', ')}</b>. От этой нагрузки ты продолжаешь уставать, даже когда отдыхаешь?</div>`;
+    h += `<div class="dashed" style="margin-top:22px"><span class="ic">${I.moon}</span><div><b>За неделю чаще всего: ${top.slice(0,2).map(([id,n]) => `${T[id].name.toLowerCase()} (${n} дн.)`).join(', ')}</b>
+      <span class="hand">от этой нагрузки ты продолжаешь уставать, даже когда отдыхаешь?</span></div></div>`;
   }
 
   const st = stats(); let any = false;
-  h += `<h2>Помогает лично тебе</h2>`;
+  h += `<div class="eyebrow">Помогает лично тебе</div><div class="stack" style="gap:18px">`;
   for(const x of TYPES){
     const rows = Object.entries(st[x.id]||{}).sort((a,b) => (b[1].rated?b[1].score/b[1].rated:-1) - (a[1].rated?a[1].score/a[1].rated:-1));
     if(!rows.length) continue; any = true;
-    h += `<div class="card" style="--c:${x.color};margin-bottom:10px"><div class="group-h" style="padding:0 0 4px"><span class="dot"></span><b>${x.name}</b></div>`;
+    h += `<div class="card pad" style="--c:${x.color}"><div class="group-h" style="padding:0 0 8px"><span class="swatch"></span><b>${x.name}</b></div>`;
     for(const [key,s] of rows){
       const p = s.rated ? s.score/s.rated : 0;
-      h += `<div class="stat ${s.rated<3?'few':''}"><div class="stat-top"><span>${esc(recText(key))}</span><span>${s.rated?`${Math.round(p*100)}% · ${s.rated} ${plural(s.rated,'оценка','оценки','оценок')}`:'не оценено'}</span></div><div class="bar"><i style="width:${p*100}%"></i></div></div>`;
+      h += `<div class="stat ${s.rated<3?'few':''}"><div class="stat-top"><span>${esc(recText(key))}</span><span>${s.rated?`${Math.round(p*100)}%`:'—'}</span></div>
+        <div class="bar-t"><i style="width:${Math.round(p*100)}%"></i></div>
+        <div class="small" style="margin:6px 0 0">${s.rated?`${s.rated} ${plural(s.rated,'оценка','оценки','оценок')}`:'не оценено'}${s.tried>s.rated?` · сделано ${s.tried}`:''}</div></div>`;
     }
     h += `</div>`;
   }
-  if(!any) h += `<p class="empty">Пока пусто. Через пару недель здесь будет видно, что восстанавливает именно тебя.</p>`;
-  else h += `<p class="small" style="margin:6px 4px">Бледные строки — меньше 3 оценок, выводы делать рано. «Частично» считается за половину.</p>`;
+  h += `</div>`;
+  if(!any) h += `<div class="dashed"><span class="ic">${I.heart}</span><div><b>Пока пусто</b><span class="hand">через пару недель тут будет видно, что восстанавливает именно тебя</span></div></div>`;
+  else h += `<p class="foot">бледные строки — меньше 3 оценок, выводы делать рано. «частично» = половина.</p>`;
   return h;
 }
 
@@ -380,19 +459,18 @@ const sheet = document.getElementById('sheet'), sheetBg = document.getElementByI
 function openSettings(){
   const s = S.settings;
   const step = (f,v) => `<div class="stepper"><button data-act="st" data-f="${f}" data-d="-1">−</button><b>${v}</b><button data-act="st" data-f="${f}" data-d="1">+</button></div>`;
-  sheet.innerHTML = `<h3>Настройки</h3>
-    <h2 style="margin-top:6px">Когда предупреждать</h2>
-    <div class="card"><div class="set-row"><span>Сила усталости от</span>${step('minIntensity', s.minIntensity)}</div>
+  sheet.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><h2>Настройки</h2><button class="hand-link" data-act="close">готово</button></div>
+    <div class="eyebrow" style="margin-top:22px">Когда предупреждать</div>
+    <div class="card pad"><div class="set-row"><span>Сила усталости от</span>${step('minIntensity', s.minIntensity)}</div>
     <div class="set-row"><span>Дней с такой усталостью</span>${step('minDays', s.minDays)}</div>
     <div class="set-row"><span>За последние, дней</span>${step('windowDays', s.windowDays)}</div></div>
-    <p class="small" style="margin:8px 4px 0">Сейчас: если один тип усталости силой ${s.minIntensity}+ отмечен ${s.minDays} из ${s.windowDays} дней — появится предупреждение. Это не медицинская норма; порог лучше согласовать с врачом или терапевтом.</p>
-    <h2>Данные</h2>
-    <div class="stack"><button class="btn" data-act="export">Сохранить резервную копию</button>
+    <p class="small">Сейчас: если один тип усталости силой ${s.minIntensity}+ отмечен ${s.minDays} из ${s.windowDays} дней — появится предупреждение. Это не медицинская норма; порог лучше согласовать с врачом или терапевтом.</p>
+    <div class="eyebrow">Данные</div>
+    <div class="stack"><button class="btn" data-act="export">Сохранить резервную копию →</button>
     <button class="btn ghost" data-act="import">Восстановить из копии</button></div>
-    <p class="small" style="margin:8px 4px 0">Всё хранится только на этом телефоне. Если удалить иконку с экрана «Домой», данные пропадут. Последняя копия: ${S.lastExport ? human(S.lastExport) : 'ещё не было'}.</p>
-    <h2>О приложении</h2>
-    <p class="small" style="margin:0 4px">Типы усталости и рекомендации — практическая карта из подкаста «Познай самого себя» (Анна Иванникова), а не медицинская классификация. Записей: ${Object.keys(S.days).length}.</p>
-    <div style="height:14px"></div><button class="btn ghost" data-act="close">Готово</button>`;
+    <p class="small">Всё хранится только на этом телефоне. Если удалить иконку с экрана «Домой», данные пропадут. Последняя копия: <b>${S.lastExport ? human(S.lastExport) : 'ещё не было'}</b>.</p>
+    <div class="eyebrow">О приложении</div>
+    <p class="small" style="margin-top:0">Типы усталости и рекомендации — практическая карта из подкаста «Познай самого себя» (Анна Иванникова), а не медицинская классификация. Записей: ${Object.keys(S.days).length}.</p>`;
   sheet.classList.add('open'); sheetBg.classList.add('open');
 }
 function closeSettings(){ sheet.classList.remove('open'); sheetBg.classList.remove('open'); }
@@ -426,6 +504,7 @@ document.addEventListener('click', e => {
   switch(act){
     case 'prev': view = addDays(view,-1); render(); break;
     case 'next': if(view < logicalToday()){ view = addDays(view,1); render(); } break;
+    case 'tonight': view = logicalToday(); render(); break;
     case 'type': {
       if(e.target.closest('.seg')) return;
       const d = day(k), id = el.dataset.id;
@@ -457,7 +536,7 @@ document.addEventListener('focusout', e => {
   const id = e.target.dataset.id; (S.custom[id] ||= []).push({ id: Date.now().toString(36), text:v });
   save(); render();
 });
-// Если приложение открыли утром после вечера — перескочить на текущий «логический» день.
+// Приложение оставили открытым на ночь — при возвращении показать новый день.
 let openedOn = logicalToday();
 document.addEventListener('visibilitychange', () => {
   if(document.hidden) return;
@@ -466,6 +545,7 @@ document.addEventListener('visibilitychange', () => {
 });
 
 render();
+if(document.fonts) document.fonts.ready.then(render);
 if('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js');
 </script>
 </body>
