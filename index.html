@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Отдых">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F4F0E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1917" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Отдых</title>
+<style>
+:root{
+  --bg:#F4F0E9; --card:#FFFDF9; --ink:#24221F; --muted:#8C857B; --line:#E6E0D6; --soft:#ECE6DC;
+  --accent:#5E7D6A; --accent-ink:#fff; --warn:#A8553A; --warn-bg:#F6E6DE;
+  --physical:#C07A5A; --emotional:#B46F86; --social:#BF9447; --cognitive:#5C80A4; --creative:#8A74AE;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#1A1917; --card:#24221F; --ink:#EEE9E1; --muted:#9A938A; --line:#35322D; --soft:#2E2B27;
+    --accent:#86A893; --accent-ink:#14201A; --warn:#E39A7F; --warn-bg:#3A2A23;
+    --physical:#D99577; --emotional:#D08AA2; --social:#D6AE63; --cognitive:#82A5C8; --creative:#A893CA;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased; padding:env(safe-area-inset-top) 0 0; min-height:100vh}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+textarea,input{font:inherit;color:inherit}
+.wrap{max-width:520px;margin:0 auto;padding:12px 16px calc(96px + env(safe-area-inset-bottom))}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 4px}
+.top h1{font-size:28px;line-height:1.15;letter-spacing:-.02em;margin:0;font-weight:700}
+.sub{color:var(--muted);font-size:15px;margin:2px 0 0}
+.nav{display:flex;gap:4px}
+.icon-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--ink)}
+.icon-btn:disabled{opacity:.3}
+.icon-btn svg{width:18px;height:18px}
+
+h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:26px 4px 10px}
+
+/* cards */
+.card{background:var(--card);border-radius:var(--r);padding:14px 16px;border:1px solid var(--line)}
+.stack{display:flex;flex-direction:column;gap:10px}
+
+.type{position:relative;text-align:left;width:100%;display:block;transition:border-color .2s, box-shadow .2s}
+.type .row{display:flex;align-items:center;gap:10px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--c)}
+.type .name{font-weight:600;font-size:17px;flex:1}
+.check{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;flex:none;transition:all .2s}
+.check svg{width:14px;height:14px;opacity:0}
+.type .sym{color:var(--muted);font-size:14px;margin:6px 0 0 20px}
+.type.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c) inset}
+.type.on .check{background:var(--c);border-color:var(--c);color:#fff}
+.type.on .check svg{opacity:1}
+
+.scale{display:none;margin:12px 0 2px 20px}
+.type.on .scale{display:block}
+.scale-l{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+.seg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.seg button{height:36px;border-radius:10px;background:var(--soft);font-weight:600;font-size:15px;color:var(--muted)}
+.seg button.on{background:var(--c);color:#fff}
+
+/* recs */
+.group{padding:6px 0}
+.group-h{display:flex;align-items:center;gap:8px;padding:10px 16px 2px}
+.group-h b{font-size:15px}
+.hint{color:var(--muted);font-size:14px;padding:2px 16px 8px 34px}
+.rec{border-top:1px solid var(--line);padding:12px 16px}
+.rec-main{display:flex;align-items:center;gap:12px;width:100%;text-align:left}
+.box{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--line);display:grid;place-items:center;flex:none;transition:all .15s}
+.box svg{width:14px;height:14px;opacity:0}
+.rec.done .box{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rec.done .box svg{opacity:1}
+.rec-t{flex:1}
+.del{color:var(--muted);font-size:13px;padding:4px}
+.chips{display:flex;gap:6px;margin:10px 0 0 36px;flex-wrap:wrap}
+.chip{padding:6px 12px;border-radius:999px;background:var(--soft);font-size:14px;color:var(--ink)}
+.chip.on.yes{background:var(--accent);color:var(--accent-ink)}
+.chip.on.partly{background:var(--social);color:#fff}
+.chip.on.no{background:var(--muted);color:var(--bg)}
+.chip-q{font-size:13px;color:var(--muted);align-self:center;margin-right:2px}
+.add{border-top:1px solid var(--line);padding:8px 16px 10px}
+.add input{width:100%;border:0;background:transparent;padding:6px 0;font-size:16px;outline:none}
+.add input::placeholder{color:var(--muted)}
+
+textarea{width:100%;border:0;background:transparent;resize:none;min-height:64px;outline:none;font-size:16px}
+textarea::placeholder{color:var(--muted)}
+
+.note{border-radius:var(--r);padding:14px 16px;font-size:15px}
+.note.warn{background:var(--warn-bg);color:var(--ink);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent)}
+.note.warn b{color:var(--warn)}
+.note.calm{background:var(--soft)}
+.note .act{margin-top:10px;font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.empty{color:var(--muted);font-size:15px;text-align:center;padding:18px 8px}
+
+/* rating prompt */
+.ask .q{font-weight:600;margin-bottom:4px}
+.ask .when{color:var(--muted);font-size:14px;margin-bottom:6px}
+.ask .rec{padding:10px 0}
+.ask .chips{margin-left:0}
+
+/* history */
+.heat{display:grid;grid-template-columns:auto repeat(14,1fr);gap:4px;align-items:center}
+.heat .lbl{font-size:12px;color:var(--muted);padding-right:6px;white-space:nowrap}
+.cell{aspect-ratio:1;border-radius:5px;background:var(--soft)}
+.dayn{font-size:10px;color:var(--muted);text-align:center}
+.dayn.today{color:var(--ink);font-weight:700}
+.colbtn{display:contents}
+.stat{padding:10px 0;border-top:1px solid var(--line)}
+.stat:first-of-type{border-top:0}
+.stat-top{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.stat-top span:last-child{color:var(--muted);font-size:13px;white-space:nowrap}
+.bar{height:6px;border-radius:3px;background:var(--soft);margin-top:7px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:3px;background:var(--c)}
+.few{opacity:.55}
+
+/* settings sheet */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;z-index:20}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;background:var(--bg);border-radius:22px 22px 0 0;
+  padding:18px 16px calc(24px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .28s ease;z-index:21;max-height:88vh;overflow:auto}
+.sheet.open{transform:none}
+.sheet-bg.open{display:block}
+.sheet h3{margin:4px 4px 14px;font-size:20px}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.set-row:first-child{border-top:0}
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper button{width:32px;height:32px;border-radius:50%;background:var(--soft);font-size:18px}
+.stepper b{min-width:22px;text-align:center}
+.btn{display:block;width:100%;padding:13px;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-weight:600;text-align:center}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.small{font-size:13px;color:var(--muted);line-height:1.45}
+
+/* tab bar */
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:4px;
+  padding:8px 16px calc(8px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 82%,transparent);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--line);z-index:10}
+.tab{flex:1;max-width:200px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);padding:4px}
+.tab svg{width:24px;height:24px}
+.tab.on{color:var(--accent)}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<nav class="tabs">
+  <button class="tab" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Вечер</button>
+  <button class="tab" data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Что помогает</button>
+</nav>
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet"></div>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+
+<script>
+'use strict';
+/* ---------- Контент (по подкасту «Познай самого себя») ---------- */
+const TYPES = [
+  { id:'physical', short:'Физ.', name:'Физическая', color:'var(--physical)',
+    sym:'Сонливость, вялость, тяжесть, мышечное напряжение, скованность, головная боль',
+    hint:'Недосып — нужен сон. Засиделся — мягкое движение, а не диван.',
+    who:'врачу', whoFull:'стоит обратиться к врачу',
+    recs:[['sleep','Лечь спать раньше'],['stretch','Лёгкая растяжка'],['walk','Неспешная прогулка'],['shower','Тёплый душ'],['massage','Массаж']] },
+  { id:'emotional', short:'Эмоц.', name:'Эмоциональная', color:'var(--emotional)',
+    sym:'Раздражительность или замкнутость, легко расплакаться, «всё, больше не могу» из‑за мелочи',
+    hint:'Не отвлекай себя развлечениями — дай эмоции место.',
+    who:'психотерапевту', whoFull:'стоит обсудить с психотерапевтом',
+    recs:[['name','Назвать эмоцию и что её вызвало'],['write','Записать мысли'],['talk','Поговорить с близким'],['silence','Побыть в тишине']] },
+  { id:'social', short:'Соц.', name:'Социальная', color:'var(--social)',
+    sym:'Не хочется никого видеть, отвечать на сообщения, рассказывать, как прошёл день',
+    hint:'Важно не сколько людей, а какой контакт сейчас нужен.',
+    who:'психотерапевту', whoFull:'стоит обсудить с психотерапевтом',
+    recs:[['alone','Побыть одному'],['chats','Отключить чаты и уведомления'],['boundary','Сказать «сегодня не могу, давай завтра»'],['quietwalk','Молча погулять с близким']] },
+  { id:'cognitive', short:'Умств.', name:'Умственная', color:'var(--cognitive)',
+    sym:'Перечитываешь абзац по три раза, не понимаешь письма, ошибки в простом',
+    hint:'Устаёшь от переключений. Нужно что-то одно, без экрана.',
+    who:'психотерапевту', whoFull:'стоит обсудить с психотерапевтом',
+    recs:[['nature','30 минут на природе'],['noscreen','Вечер без экрана'],['monotone','Монотонное дело без подкаста (готовка, уборка)'],['move','Простая физическая активность']] },
+  { id:'creative', short:'Творч.', name:'Творческая', color:'var(--creative)',
+    sym:'«Ничего не могу придумать», страх, что выдохся, не радует любимое дело',
+    hint:'Переключиться с «должен создать ценное» на «просто делаю».',
+    who:'психотерапевту', whoFull:'стоит обсудить с психотерапевтом',
+    recs:[['aimless','Рисовать или играть без цели'],['read','Почитать не по работе'],['hands','Сделать что-то руками'],['puzzle','Пазл или настольная игра'],['permission','Разрешить себе сегодня ничего не создавать']] },
+];
+const T = Object.fromEntries(TYPES.map(t => [t.id, t]));
+const RATE = [['yes','Помогло'],['partly','Частично'],['no','Нет']];
+const SCORE = { yes:1, partly:.5, no:0 };
+
+/* ---------- Хранение ---------- */
+const KEY = 'otdyh.v1';
+const DEFAULTS = { version:1, days:{}, custom:{}, settings:{ windowDays:14, minDays:10, minIntensity:3 }, dismissed:{}, lastExport:null };
+let S = load();
+function load(){
+  try{ const raw = localStorage.getItem(KEY); if(raw){ const d = JSON.parse(raw); return { ...DEFAULTS, ...d, settings:{ ...DEFAULTS.settings, ...(d.settings||{}) } }; } }catch(e){}
+  return structuredClone(DEFAULTS);
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch(e){}
+
+/* ---------- Даты (до 5 утра — это ещё вчерашний вечер) ---------- */
+const pad = n => String(n).padStart(2,'0');
+const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = k => { const [y,m,d] = k.split('-').map(Number); return new Date(y, m-1, d, 12); };
+const addDays = (k, n) => { const d = parse(k); d.setDate(d.getDate()+n); return keyOf(d); };
+const logicalToday = () => { const d = new Date(); d.setHours(d.getHours()-5); return keyOf(d); };
+const WD = ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const MO = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const human = k => { const d = parse(k); return `${d.getDate()} ${MO[d.getMonth()]}`; };
+const relName = k => { const t = logicalToday(); if(k===t) return 'Сегодня'; if(k===addDays(t,-1)) return 'Вчера'; const w = WD[parse(k).getDay()]; return w[0].toUpperCase()+w.slice(1); };
+
+/* ---------- Модель ---------- */
+const day = k => S.days[k] || (S.days[k] = { types:{}, actions:{}, skip:'' });
+const peek = k => S.days[k];
+const recsOf = id => [...T[id].recs.map(([rid, text]) => ({ key:`${id}.${rid}`, text })), ...(S.custom[id]||[]).map(c => ({ key:`${id}.c.${c.id}`, text:c.text, custom:true }))];
+const recText = key => { const [id] = key.split('.'); const r = recsOf(id).find(r => r.key === key); return r ? r.text : '—'; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function unratedBefore(k){
+  for(let i=1;i<=3;i++){
+    const pk = addDays(k,-i), d = peek(pk);
+    if(!d) continue;
+    const list = Object.entries(d.actions).filter(([key,a]) => a.done && !a.helped && d.types[key.split('.')[0]]);
+    if(list.length) return { k:pk, list };
+    if(Object.keys(d.types).length) return null;
+  }
+  return null;
+}
+
+function signals(){
+  const t = logicalToday(), { windowDays:w, minDays:m, minIntensity:mi } = S.settings, out = [];
+  for(const type of TYPES){
+    if(S.dismissed[type.id] && S.dismissed[type.id] > t) continue;
+    let n = 0, rated = 0, score = 0;
+    for(let i=0;i<w;i++){
+      const d = peek(addDays(t,-i)); if(!d) continue;
+      if((d.types[type.id]||0) >= mi) n++;
+      for(const [key,a] of Object.entries(d.actions)) if(key.startsWith(type.id+'.') && a.done && a.helped){ rated++; score += SCORE[a.helped]; }
+    }
+    if(n >= m) out.push({ type, n, w, rated, score });
+  }
+  return out;
+}
+
+function stats(){
+  const res = {};
+  for(const [k,d] of Object.entries(S.days)){
+    for(const [key,a] of Object.entries(d.actions)){
+      const id = key.split('.')[0];
+      if(!a.done || !d.types[id]) continue;
+      const s = (res[id] ||= {})[key] ||= { tried:0, rated:0, score:0 };
+      s.tried++; if(a.helped){ s.rated++; s.score += SCORE[a.helped]; }
+    }
+  }
+  return res;
+}
+
+/* ---------- Иконки ---------- */
+const I = {
+  tick:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  left:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  right:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+};
+
+/* ---------- Отрисовка ---------- */
+let tab = 'today', view = logicalToday();
+const app = document.getElementById('app');
+
+function render(){
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  app.innerHTML = tab === 'today' ? renderToday() : renderHistory();
+}
+
+function chips(k, key, a){
+  return `<div class="chips">${RATE.map(([v,l]) => `<button class="chip ${v} ${a.helped===v?'on':''}" data-act="rate" data-day="${k}" data-key="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
+}
+
+function renderToday(){
+  const t = logicalToday(), k = view, d = peek(k) || { types:{}, actions:{}, skip:'' };
+  const sel = TYPES.filter(x => d.types[x.id]);
+  let h = `<div class="top"><div><h1>${relName(k)}</h1><p class="sub">${human(k)}</p></div>
+    <div class="nav"><button class="icon-btn" data-act="prev" aria-label="Предыдущий день">${I.left}</button>
+    <button class="icon-btn" data-act="next" aria-label="Следующий день" ${k>=t?'disabled':''}>${I.right}</button></div></div>`;
+
+  if(k === t){
+    for(const s of signals()){
+      const helped = s.rated ? ` Отдых помогал в ${Math.round(s.score/s.rated*100)}% оценённых случаев.` : '';
+      h += `<div class="note warn" style="margin-top:14px"><b>${s.type.name} усталость ${s.n} из последних ${s.w} дней</b> (сила ${S.settings.minIntensity}+). Устойчивого улучшения нет — ${s.type.whoFull}.${helped}
+        <div><button class="act" data-act="dismiss" data-id="${s.type.id}">Понятно, скрыть на неделю</button></div></div>`;
+    }
+  }
+
+  const u = unratedBefore(k);
+  if(u){
+    h += `<h2>${u.k===addDays(k,-1)?'Вчера':human(u.k)} ты сделал</h2><div class="card ask"><div class="when">Помогло?</div>
+      ${u.list.map(([key,a]) => `<div class="rec" style="border-top:0"><div>${esc(recText(key))}</div>${chips(u.k,key,a)}</div>`).join('')}</div>`;
+  }
+
+  h += `<h2>От чего устал?</h2><div class="stack">`;
+  for(const x of TYPES){
+    const v = d.types[x.id];
+    h += `<div class="card type ${v?'on':''}" style="--c:${x.color}" data-act="type" data-id="${x.id}" role="button">
+      <div class="row"><span class="dot"></span><span class="name">${x.name}</span><span class="check">${I.tick}</span></div>
+      <div class="sym">${x.sym}</div>
+      <div class="scale"><div class="scale-l"><span>слабо</span><span>сильно</span></div>
+      <div class="seg">${[1,2,3,4,5].map(n => `<button class="${v===n?'on':''}" data-act="lvl" data-id="${x.id}" data-n="${n}">${n}</button>`).join('')}</div></div></div>`;
+  }
+  h += `</div>`;
+
+  if(sel.length >= 4){
+    h += `<div class="note calm" style="margin-top:12px"><b>Всё сразу.</b> Похоже, нужен не какой-то вид отдыха, а снижение нагрузки — или несколько дней без попытки быть эффективным.</div>`;
+  }
+
+  if(sel.length){
+    h += `<h2>Что сделал для восстановления</h2><div class="stack">`;
+    for(const x of sel){
+      h += `<div class="card group" style="--c:${x.color};padding:0"><div class="group-h"><span class="dot"></span><b>${x.name}</b></div><div class="hint">${x.hint}</div>`;
+      for(const r of recsOf(x.id)){
+        const a = d.actions[r.key] || {};
+        h += `<div class="rec ${a.done?'done':''}"><div class="rec-main"><button class="rec-main" data-act="done" data-key="${r.key}"><span class="box">${I.tick}</span><span class="rec-t">${esc(r.text)}</span></button>${r.custom?`<button class="del" data-act="delc" data-key="${r.key}" aria-label="Удалить">✕</button>`:''}</div>
+          ${a.done ? chips(k, r.key, a) : ''}</div>`;
+      }
+      h += `<div class="add"><input data-act="addc" data-id="${x.id}" placeholder="+ Своё" enterkeyhint="done"></div></div>`;
+    }
+    h += `</div>`;
+  }
+
+  h += `<h2>Что я могу сегодня не делать?</h2><div class="card"><textarea data-act="skip" rows="2" placeholder="Необязательно">${esc(d.skip||'')}</textarea></div>`;
+  if(!sel.length) h += `<p class="empty">Отметь, что устало, — появятся рекомендации.</p>`;
+  return h;
+}
+
+const plural = (n,a,b,c) => { const m=n%10, h=n%100; return m===1&&h!==11?a:(m>=2&&m<=4&&(h<10||h>=20))?b:c; };
+const fmt = n => (Math.round(n*10)/10).toString().replace('.', ',');
+
+function renderHistory(){
+  const t = logicalToday(), days = [...Array(14)].map((_,i) => addDays(t, i-13));
+  let h = `<div class="top"><div><h1>Что помогает</h1><p class="sub">Личная карта восстановления</p></div>
+    <button class="icon-btn" data-act="settings" aria-label="Настройки">${I.gear}</button></div>`;
+
+  h += `<h2>Последние 14 дней</h2><div class="card"><div class="heat">`;
+  for(const x of TYPES){
+    h += `<span class="lbl">${x.short}</span>`;
+    for(const k of days){ const v = (peek(k)||{types:{}}).types[x.id]; h += `<button class="cell" data-act="open" data-day="${k}" style="${v?`background:${x.color};opacity:${.25+v*.15}`:''}" aria-label="${human(k)}"></button>`; }
+  }
+  h += `<span></span>${days.map(k => `<span class="dayn ${k===t?'today':''}">${parse(k).getDate()}</span>`).join('')}</div></div>`;
+
+  // неделя
+  const week = {}; for(let i=0;i<7;i++){ const d = peek(addDays(t,-i)); if(d) for(const id in d.types) week[id] = (week[id]||0)+1; }
+  const top = Object.entries(week).sort((a,b) => b[1]-a[1]);
+  if(top.length){
+    h += `<div class="note calm" style="margin-top:10px">За неделю чаще всего: <b>${top.slice(0,2).map(([id,n]) => `${T[id].name.toLowerCase()} (${n} дн.)`).join(', ')}</b>. От этой нагрузки ты продолжаешь уставать, даже когда отдыхаешь?</div>`;
+  }
+
+  const st = stats(); let any = false;
+  h += `<h2>Помогает лично тебе</h2>`;
+  for(const x of TYPES){
+    const rows = Object.entries(st[x.id]||{}).sort((a,b) => (b[1].rated?b[1].score/b[1].rated:-1) - (a[1].rated?a[1].score/a[1].rated:-1));
+    if(!rows.length) continue; any = true;
+    h += `<div class="card" style="--c:${x.color};margin-bottom:10px"><div class="group-h" style="padding:0 0 4px"><span class="dot"></span><b>${x.name}</b></div>`;
+    for(const [key,s] of rows){
+      const p = s.rated ? s.score/s.rated : 0;
+      h += `<div class="stat ${s.rated<3?'few':''}"><div class="stat-top"><span>${esc(recText(key))}</span><span>${s.rated?`${Math.round(p*100)}% · ${s.rated} ${plural(s.rated,'оценка','оценки','оценок')}`:'не оценено'}</span></div><div class="bar"><i style="width:${p*100}%"></i></div></div>`;
+    }
+    h += `</div>`;
+  }
+  if(!any) h += `<p class="empty">Пока пусто. Через пару недель здесь будет видно, что восстанавливает именно тебя.</p>`;
+  else h += `<p class="small" style="margin:6px 4px">Бледные строки — меньше 3 оценок, выводы делать рано. «Частично» считается за половину.</p>`;
+  return h;
+}
+
+/* ---------- Настройки ---------- */
+const sheet = document.getElementById('sheet'), sheetBg = document.getElementById('sheetBg');
+function openSettings(){
+  const s = S.settings;
+  const step = (f,v) => `<div class="stepper"><button data-act="st" data-f="${f}" data-d="-1">−</button><b>${v}</b><button data-act="st" data-f="${f}" data-d="1">+</button></div>`;
+  sheet.innerHTML = `<h3>Настройки</h3>
+    <h2 style="margin-top:6px">Когда предупреждать</h2>
+    <div class="card"><div class="set-row"><span>Сила усталости от</span>${step('minIntensity', s.minIntensity)}</div>
+    <div class="set-row"><span>Дней с такой усталостью</span>${step('minDays', s.minDays)}</div>
+    <div class="set-row"><span>За последние, дней</span>${step('windowDays', s.windowDays)}</div></div>
+    <p class="small" style="margin:8px 4px 0">Сейчас: если один тип усталости силой ${s.minIntensity}+ отмечен ${s.minDays} из ${s.windowDays} дней — появится предупреждение. Это не медицинская норма; порог лучше согласовать с врачом или терапевтом.</p>
+    <h2>Данные</h2>
+    <div class="stack"><button class="btn" data-act="export">Сохранить резервную копию</button>
+    <button class="btn ghost" data-act="import">Восстановить из копии</button></div>
+    <p class="small" style="margin:8px 4px 0">Всё хранится только на этом телефоне. Если удалить иконку с экрана «Домой», данные пропадут. Последняя копия: ${S.lastExport ? human(S.lastExport) : 'ещё не было'}.</p>
+    <h2>О приложении</h2>
+    <p class="small" style="margin:0 4px">Типы усталости и рекомендации — практическая карта из подкаста «Познай самого себя» (Анна Иванникова), а не медицинская классификация. Записей: ${Object.keys(S.days).length}.</p>
+    <div style="height:14px"></div><button class="btn ghost" data-act="close">Готово</button>`;
+  sheet.classList.add('open'); sheetBg.classList.add('open');
+}
+function closeSettings(){ sheet.classList.remove('open'); sheetBg.classList.remove('open'); }
+sheetBg.onclick = closeSettings;
+
+async function doExport(){
+  const name = `otdyh-${logicalToday()}.json`, json = JSON.stringify(S, null, 1);
+  const file = new File([json], name, { type:'application/json' });
+  S.lastExport = logicalToday(); save();
+  try{ if(navigator.canShare && navigator.canShare({ files:[file] })){ await navigator.share({ files:[file], title:name }); openSettings(); return; } }catch(e){ if(e.name==='AbortError') return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  openSettings();
+}
+document.getElementById('importFile').onchange = async e => {
+  const f = e.target.files[0]; if(!f) return;
+  try{
+    const d = JSON.parse(await f.text());
+    if(!d || typeof d.days !== 'object') throw 0;
+    if(!confirm(`Заменить текущие данные копией (${Object.keys(d.days).length} записей)?`)) return;
+    S = { ...DEFAULTS, ...d, settings:{ ...DEFAULTS.settings, ...(d.settings||{}) } }; save(); closeSettings(); render();
+  }catch(_){ alert('Не похоже на файл резервной копии.'); }
+  e.target.value = '';
+};
+
+/* ---------- События ---------- */
+const LIM = { minIntensity:[1,5], minDays:[1,60], windowDays:[3,60] };
+document.addEventListener('click', e => {
+  const tb = e.target.closest('.tab'); if(tb){ tab = tb.dataset.tab; if(tab==='today') view = logicalToday(); render(); scrollTo(0,0); return; }
+  const el = e.target.closest('[data-act]'); if(!el) return;
+  const act = el.dataset.act, k = view;
+  switch(act){
+    case 'prev': view = addDays(view,-1); render(); break;
+    case 'next': if(view < logicalToday()){ view = addDays(view,1); render(); } break;
+    case 'type': {
+      if(e.target.closest('.seg')) return;
+      const d = day(k), id = el.dataset.id;
+      if(d.types[id]) delete d.types[id]; else d.types[id] = 3;
+      save(); render(); break; }
+    case 'lvl': { day(k).types[el.dataset.id] = +el.dataset.n; save(); render(); break; }
+    case 'done': { const d = day(k), a = d.actions[el.dataset.key] ||= {}; a.done = !a.done; if(!a.done) delete d.actions[el.dataset.key]; save(); render(); break; }
+    case 'rate': { const d = day(el.dataset.day), a = d.actions[el.dataset.key] ||= { done:true }; a.helped = a.helped === el.dataset.v ? null : el.dataset.v; save(); render(); break; }
+    case 'delc': { const [id,,cid] = el.dataset.key.split('.'); S.custom[id] = (S.custom[id]||[]).filter(c => c.id !== cid); save(); render(); break; }
+    case 'dismiss': { S.dismissed[el.dataset.id] = addDays(logicalToday(), 7); save(); render(); break; }
+    case 'open': { view = el.dataset.day; tab = 'today'; render(); scrollTo(0,0); break; }
+    case 'settings': openSettings(); break;
+    case 'close': closeSettings(); break;
+    case 'st': { const f = el.dataset.f, [lo,hi] = LIM[f]; S.settings[f] = Math.min(hi, Math.max(lo, S.settings[f] + +el.dataset.d));
+      if(S.settings.minDays > S.settings.windowDays) S.settings.minDays = S.settings.windowDays; save(); openSettings(); render(); break; }
+    case 'export': doExport(); break;
+    case 'import': document.getElementById('importFile').click(); break;
+  }
+});
+document.addEventListener('input', e => {
+  if(e.target.dataset.act === 'skip'){ day(view).skip = e.target.value; save(); }
+});
+document.addEventListener('keydown', e => {
+  if(e.target.dataset.act === 'addc' && e.key === 'Enter'){ e.preventDefault(); e.target.blur(); }
+});
+document.addEventListener('focusout', e => {
+  if(e.target.dataset.act !== 'addc') return;
+  const v = e.target.value.trim(); if(!v) return;
+  const id = e.target.dataset.id; (S.custom[id] ||= []).push({ id: Date.now().toString(36), text:v });
+  save(); render();
+});
+// Если приложение открыли утром после вечера — перескочить на текущий «логический» день.
+let openedOn = logicalToday();
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) return;
+  const t = logicalToday();
+  if(t !== openedOn){ if(view === openedOn) view = t; openedOn = t; render(); }
+});
+
+render();
+if('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
