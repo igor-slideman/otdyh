@@ -128,6 +128,23 @@ textarea::placeholder{color:var(--muted)}
 .dashed b{display:block;font-size:17px;margin-bottom:2px}
 .dashed .hand{font:700 23px/1.15 var(--hand);color:var(--accent-text)}
 
+/* details, tips, phq, flags */
+.more{margin:8px 0 0 42px}
+.more summary{font:700 20px/1.2 var(--hand);color:var(--accent-text);cursor:pointer;list-style:none;display:inline-block}
+.more summary::-webkit-details-marker{display:none}
+.more div{white-space:pre-line;font-size:15px;color:var(--muted);margin-top:6px;line-height:1.5}
+.tip{margin:0 20px 12px 46px;display:inline-block;padding:5px 12px;border:2px dashed var(--line);border-radius:999px;font-size:14px;font-weight:600}
+.phq{margin-top:16px;padding-top:14px;border-top:2px dashed var(--on-c)}
+.phq p{font-size:16px}
+.phq-q{font-weight:700;margin:14px 0 2px}
+.note .chip{background:#FFFDF7;color:var(--on-c);border-color:var(--on-c);font-size:13px;padding:5px 10px}
+.note .chip.on{background:var(--on-c);color:#fff}
+.phq-r{margin-top:12px!important;padding-top:12px;border-top:2px dashed var(--on-c)}
+.flag-l{font-size:14px!important;margin-top:12px!important}
+.flag-l button{text-decoration:underline;font-weight:700;color:inherit}
+.flags ul{margin:0;padding-left:18px}
+.flags li{margin:6px 0;font-size:15px;line-height:1.4}
+
 /* rating prompt */
 .ask .rec:first-of-type{border-top:0}
 .ask .chips{margin-left:0}
@@ -175,7 +192,10 @@ textarea::placeholder{color:var(--muted)}
 /* ---------- tab bar ---------- */
 .tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));display:flex;gap:4px;
   padding:5px;background:var(--paper);border:var(--bw) solid var(--line);border-radius:999px;box-shadow:var(--sh-s);z-index:10}
-.tab{display:flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-weight:700;font-size:16px;white-space:nowrap}
+.tab{display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;font-weight:700;font-size:16px;white-space:nowrap}
+.tab .lbl{display:none}
+.tab.on .lbl{display:inline}
+.tab.on{padding:11px 20px}
 .tab svg{width:20px;height:20px}
 .tab.on{background:var(--accent);color:#fff}
 
@@ -195,8 +215,9 @@ textarea::placeholder{color:var(--muted)}
 <body>
 <div class="wrap" id="app"></div>
 <nav class="tabs">
-  <button class="tab" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Вечер</button>
-  <button class="tab" data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>Что помогает</button>
+  <button class="tab" data-tab="day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg><span class="lbl">День</span></button>
+  <button class="tab" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="lbl">Вечер</span></button>
+  <button class="tab" data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg><span class="lbl">Что помогает</span></button>
 </nav>
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet" id="sheet"></div>
@@ -204,45 +225,80 @@ textarea::placeholder{color:var(--muted)}
 
 <script>
 'use strict';
-/* ---------- Контент (по подкасту «Познай самого себя») ---------- */
+/* ---------- Контент: подкаст «Познай самого себя» + исследования ---------- */
+const WRITE_TOPICS = `Сколько хочется — хоть три строчки. Можно взять любую тему:
+• что сегодня задело и почему
+• что я чувствую и где это в теле
+• чего мне сейчас не хватает
+• что я могу отпустить до завтра
+• что сегодня получилось, пусть мелочь
+• что бы я сказал другу на моём месте`;
+const STEAM = `Разрядка, которая успокаивает тело, а не разгоняет:
+• напрячь все мышцы изо всех сил на 5 секунд и резко отпустить, 3–5 раз
+• встряхнуться всем телом, как собака после воды, 1–2 минуты
+• громко выдохнуть со звуком «ха-а-а» несколько раз
+• скомкать и сжать полотенце или подушку, потом отпустить`;
+const ANY = { id:'any', name:'При любой усталости', color:'var(--accent-soft)',
+  hint:'начни с этого — так голова отпускает работу.',
+  recs:[['close','Закрыть работу: записать дела на завтра','Выпиши хвосты на завтра, закрой рабочие вкладки и почту. Если мысль о работе вернётся — скажи себе: «это уже в списке».'],
+        ['breath','5 минут дышать с длинным выдохом','Два коротких вдоха носом подряд и длинный медленный выдох ртом. Спокойно повторять около 5 минут.']] };
 const TYPES = [
   { id:'physical', short:'Физ.', name:'Физическая', color:'var(--physical)',
     sym:'Сонливость, вялость, тяжесть, мышечное напряжение, скованность, головная боль',
     hint:'недосып — нужен сон. засиделся — мягкое движение, а не диван.',
-    whoFull:'стоит обратиться к врачу',
-    recs:[['sleep','Лечь спать раньше'],['stretch','Лёгкая растяжка'],['walk','Неспешная прогулка'],['shower','Тёплый душ'],['massage','Массаж']] },
+    recs:[['regular','Ложиться в одно и то же время'],['sleep','Лечь спать раньше'],['shower','Тёплый душ за 1–2 часа до сна'],['walk','Неспешная прогулка'],['stretch','Лёгкая растяжка'],['massage','Самомассаж или массажный мяч']] },
   { id:'emotional', short:'Эмоц.', name:'Эмоциональная', color:'var(--emotional)',
-    sym:'Раздражительность или замкнутость, легко расплакаться, «всё, больше не могу» из‑за мелочи',
+    sym:'Раздражительность или замкнутость, легко расплакаться, «всё, больше не могу» из‑за мелочи, страх, что выдохся',
     hint:'не отвлекай себя развлечениями — дай эмоции место.',
-    whoFull:'стоит обсудить с психотерапевтом',
-    recs:[['name','Назвать эмоцию и что её вызвало'],['write','Записать мысли'],['talk','Поговорить с близким'],['silence','Побыть в тишине']] },
+    recs:[['name','Назвать эмоцию одним словом'],['write','Выписать мысли о дне', WRITE_TOPICS],['talk','Попросить близкого выслушать, потом сменить тему'],['kind','Сказать себе: «мне тяжело, и это нормально»'],['steam','Выпустить пар без разрушений', STEAM],['silence','Побыть в тишине']] },
   { id:'social', short:'Соц.', name:'Социальная', color:'var(--social)',
     sym:'Не хочется никого видеть, отвечать на сообщения, рассказывать, как прошёл день',
     hint:'важно не сколько людей, а какой контакт сейчас нужен.',
-    whoFull:'стоит обсудить с психотерапевтом',
-    recs:[['alone','Побыть одному'],['chats','Отключить чаты и уведомления'],['boundary','Сказать «сегодня не могу, давай завтра»'],['quietwalk','Молча погулять с близким']] },
+    recs:[['alone','Побыть одному'],['chats','Режим «Не беспокоить» на вечер'],['boundary','Сказать «сегодня не могу, давай завтра»'],['quietwalk','Молча погулять с близким']] },
   { id:'cognitive', short:'Умств.', name:'Умственная', color:'var(--cognitive)',
-    sym:'Перечитываешь абзац по три раза, не понимаешь письма, ошибки в простом',
-    hint:'устаёшь от переключений. нужно что-то одно, без экрана.',
-    whoFull:'стоит обсудить с психотерапевтом',
-    recs:[['nature','30 минут на природе'],['noscreen','Вечер без экрана'],['monotone','Монотонное дело без подкаста (готовка, уборка)'],['move','Простая физическая активность']] },
-  { id:'creative', short:'Творч.', name:'Творческая', color:'var(--creative)',
-    sym:'«Ничего не могу придумать», страх, что выдохся, не радует любимое дело',
-    hint:'переключиться с «должен создать ценное» на «просто делаю».',
-    whoFull:'стоит обсудить с психотерапевтом',
-    recs:[['aimless','Рисовать или играть без цели'],['read','Почитать не по работе'],['hands','Сделать что-то руками'],['puzzle','Пазл или настольная игра'],['permission','Разрешить себе сегодня ничего не создавать']] },
+    sym:'Перечитываешь абзац по три раза, ошибки в простом, нет идей — «ничего не могу придумать»',
+    hint:'устаёшь от переключений. нужно что-то одно и без работы.',
+    recs:[['nature','20–30 минут в парке или у деревьев'],['noscreen','Без работы и тревожных новостей на экране'],['nofeed','Без ленты соцсетей (один ролик — можно)'],['monotone','Монотонное дело без подкаста (готовка, уборка)'],['hands','Сделать что-то руками'],['read','Почитать не по работе'],['play','Порисовать, пазл или игра — без цели'],['permission','Разрешить себе сегодня ничего не придумывать']] },
 ];
+const DAY = { id:'day', name:'Днём', color:'var(--social)', recs:[
+  ['light','10–20 минут дневного света утром','Выйти на улицу или постоять у открытого окна в первые часы после подъёма. Утренний свет помогает вечером легче засыпать.'],
+  ['water','Стакан воды утром, бутылка — на столе','Даже лёгкое обезвоживание ухудшает внимание и настроение. Проще всего пить, когда вода на виду.'],
+  ['coffee','Кофе — только до 12:00','Кофеин действует больше 6 часов и сокращает сон, даже когда этого не замечаешь.'],
+  ['breaks','Перерыв каждые 60–90 минут','Встать, пройтись, посмотреть вдаль 5–10 минут. После тяжёлой задачи — перерыв подольше.'],
+  ['batch','Почта и мессенджеры — 3 раза в день','Проверять в выбранное время, а не по каждому уведомлению. Так меньше переключений и стресса.'],
+  ['focus','Одна задача за раз','На время рабочего блока закрыть лишние вкладки и чаты. Переключения утомляют сильнее самой работы.'],
+  ['lunch','Обед не за компьютером','Хотя бы 20 минут без экрана и рабочих разговоров.'],
+  ['stop','Решить утром, во сколько закончишь','Время окончания, назначенное заранее, проще соблюсти вечером.'],
+]};
+const PHRASES = ['Отдых наполняет тело энергией.','Отдых снимает нервное напряжение.','Отдых удерживает фокус.','Отдых рождает лучшие идеи.','Отдых укрепляет иммунитет.','Отдых предотвращает истощение.','Отдых помогает усваивать информацию.','Отдых дарит эмоциональное равновесие.','Отдых заботится о сердце.','Отдых дарит глубокий сон.','Отдых проясняет мысли.','Отдых укрепляет отношения с близкими.','Отдых возвращает желание действовать и достигать целей.','Отдых возвращает точность.','Отдых улучшает самочувствие.','Отдых создаёт баланс в жизни.','Отдых помогает слышать себя.','Отдых улучшает настроение.','Отдых дарит лёгкость в теле.','Отдых возвращает бодрость.','Отдых наполняет силы смыслом.','Отдых перезагружает весь организм.','Отдых сохраняет здоровье.','Отдых расширяет границы мышления.','Отдых зажигает искру вдохновения.','Отдых освобождает место для нового.','Отдых делает взгляд свежим.','Отдых упрощает сложные задачи.','Отдых возвращает радость жизни.','Отдых дарит ощущение гармонии.','Отдых возвращает внутренний покой.','Отдых вдохновляет на перемены.','Отдых возвращает вкус к деталям.','Отдых делает день насыщеннее.','Отдых открывает новые перспективные пути.','Отдых возвращает кайф от любимого дела.','Отдых превращает усилие в удовольствие.'];
+const LEGACY = { 'cognitive.move':'Простая физическая активность' };
 const T = Object.fromEntries(TYPES.map(t => [t.id, t]));
 const RATE = [['yes','Помогло'],['partly','Частично'],['no','Нет']];
 const SCORE = { yes:1, partly:.5, no:0 };
 
 /* ---------- Хранение ---------- */
 const KEY = 'otdyh.v1';
-const DEFAULTS = { version:1, days:{}, custom:{}, settings:{ windowDays:14, minDays:10, minIntensity:3 }, dismissed:{}, lastExport:null };
+const DEFAULTS = { version:2, days:{}, custom:{}, settings:{ windowDays:14, minDays:10, minIntensity:3 }, dismissed:{}, lastExport:null, phq:null, phqDraft:{} };
 let S = load();
 function load(){
-  try{ const raw = localStorage.getItem(KEY); if(raw){ const d = JSON.parse(raw); return { ...DEFAULTS, ...d, settings:{ ...DEFAULTS.settings, ...(d.settings||{}) } }; } }catch(e){}
+  try{ const raw = localStorage.getItem(KEY); if(raw){ const d = JSON.parse(raw); return migrate({ ...DEFAULTS, ...d, settings:{ ...DEFAULTS.settings, ...(d.settings||{}) } }); } }catch(e){}
   return JSON.parse(JSON.stringify(DEFAULTS));
+}
+// «Творческая» стала частью «Умственной»: переносим старые записи
+function migrate(s){
+  const map = { aimless:'play', puzzle:'play', read:'read', hands:'hands', permission:'permission' };
+  for(const d of Object.values(s.days||{})){
+    if(d.types && d.types.creative != null){ d.types.cognitive = Math.max(d.types.cognitive||0, d.types.creative); delete d.types.creative; }
+    for(const key of Object.keys(d.actions||{})){
+      if(!key.startsWith('creative.')) continue;
+      const rest = key.slice(9), nk = 'cognitive.' + (rest.startsWith('c.') ? rest : (map[rest]||rest));
+      if(!d.actions[nk]) d.actions[nk] = d.actions[key];
+      delete d.actions[key];
+    }
+  }
+  if(s.custom && s.custom.creative){ s.custom.cognitive = [...(s.custom.cognitive||[]), ...s.custom.creative]; delete s.custom.creative; }
+  s.phqDraft ||= {}; s.version = 2;
+  return s;
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch(e){}
@@ -261,16 +317,19 @@ const relName = k => { const t = logicalToday(); if(k===t) return 'Сегодн�
 /* ---------- Модель ---------- */
 const day = k => S.days[k] || (S.days[k] = { types:{}, actions:{}, skip:'' });
 const peek = k => S.days[k];
-const recsOf = id => [...T[id].recs.map(([rid, text]) => ({ key:`${id}.${rid}`, text })), ...(S.custom[id]||[]).map(c => ({ key:`${id}.c.${c.id}`, text:c.text, custom:true }))];
-const recText = key => { const [id] = key.split('.'); const r = recsOf(id).find(r => r.key === key); return r ? r.text : '—'; };
+const src = id => id === 'any' ? ANY : id === 'day' ? DAY : T[id];
+const recsOf = id => [...src(id).recs.map(([rid, text, more]) => ({ key:`${id}.${rid}`, text, more })), ...(S.custom[id]||[]).map(c => ({ key:`${id}.c.${c.id}`, text:c.text, custom:true }))];
+const active = (d, key) => { const id = key.split('.')[0]; return id === 'any' ? Object.keys(d.types).length > 0 : !!d.types[id]; };
+const recText = key => { const [id] = key.split('.'); const r = src(id) ? recsOf(id).find(r => r.key === key) : null; return r ? r.text : (LEGACY[key] || '—'); };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dailyPhrase = k => { const n = Math.floor(parse(k).getTime()/864e5); return PHRASES[((n % PHRASES.length) + PHRASES.length) % PHRASES.length]; };
 const plural = (n,a,b,c) => { const m=n%10, h=n%100; return m===1&&h!==11?a:(m>=2&&m<=4&&(h<10||h>=20))?b:c; };
 
 function unratedBefore(k){
   for(let i=1;i<=3;i++){
     const pk = addDays(k,-i), d = peek(pk);
     if(!d) continue;
-    const list = Object.entries(d.actions).filter(([key,a]) => a.done && !a.helped && d.types[key.split('.')[0]]);
+    const list = Object.entries(d.actions).filter(([key,a]) => a.done && !a.helped && active(d, key));
     if(list.length) return { k:pk, list };
     if(Object.keys(d.types).length) return null;
   }
@@ -279,17 +338,53 @@ function unratedBefore(k){
 
 function signals(){
   const t = logicalToday(), { windowDays:w, minDays:m, minIntensity:mi } = S.settings, out = [];
+  const count = (id, span) => { let n = 0; for(let i=0;i<span;i++){ const d = peek(addDays(t,-i)); if(d && (d.types[id]||0) >= mi) n++; } return n; };
   for(const type of TYPES){
     if(S.dismissed[type.id] && S.dismissed[type.id] > t) continue;
-    let n = 0, rated = 0, score = 0;
-    for(let i=0;i<w;i++){
-      const d = peek(addDays(t,-i)); if(!d) continue;
-      if((d.types[type.id]||0) >= mi) n++;
-      for(const [key,a] of Object.entries(d.actions)) if(key.startsWith(type.id+'.') && a.done && a.helped){ rated++; score += SCORE[a.helped]; }
-    }
-    if(n >= m) out.push({ type, n, w, rated, score });
+    const n = count(type.id, w); if(n < m) continue;
+    let rated = 0, score = 0;
+    for(let i=0;i<w;i++){ const d = peek(addDays(t,-i)); if(!d) continue;
+      for(const [key,a] of Object.entries(d.actions)) if(key.startsWith(type.id+'.') && a.done && a.helped){ rated++; score += SCORE[a.helped]; } }
+    const sig = { type, n, w, rated, score, level:'main' };
+    if(type.id === 'physical'){ const n28 = count('physical', 28); if(n28 >= 18 && (!rated || score/rated < .5)){ sig.level = 'doctor'; sig.n28 = n28; } }
+    out.push(sig);
   }
   return out;
+}
+
+const PHQ_Q = ['Мало интереса или удовольствия от дел', 'Подавленность, грусть или безнадёжность'];
+const PHQ_A = ['ни разу','несколько дней','больше половины дней','почти каждый день'];
+function phqBlock(){
+  const t = logicalToday();
+  if(S.phq && addDays(S.phq.date, 14) > t){
+    return S.phq.score >= 3
+      ? `<p class="phq-r"><b>Две проверки: ${S.phq.score} из 6.</b> Обсуди это на ближайшей сессии с психотерапевтом. Если она нескоро — запишись раньше.</p>`
+      : `<p class="phq-r"><b>Две проверки: ${S.phq.score} из 6</b> — на что-то большее не похоже. Но если так продолжится, расскажи терапевту.</p>`;
+  }
+  return `<div class="phq"><p><b>Две короткие проверки.</b> За последние 2 недели как часто тебя беспокоило:</p>
+    ${PHQ_Q.map((q,i) => `<div class="phq-q">${q}</div><div class="chips" style="margin-left:0">${PHQ_A.map((a,v) => `<button class="chip ${S.phqDraft['q'+i]===v?'on':''}" data-act="phq" data-q="${i}" data-v="${v}">${a}</button>`).join('')}</div>`).join('')}</div>`;
+}
+
+function warnCard(s, withPhq){
+  const mi = S.settings.minIntensity, pct = s.rated ? Math.round(s.score/s.rated*100) : null;
+  const help = s.rated >= 3 && s.score/s.rated < .5 ? ` Отдых помогал редко (в ${pct}% случаев) — похоже, дело не только в отдыхе.`
+             : s.rated ? ` Отдых помогал в ${pct}% оценённых случаев.` : '';
+  let title, text;
+  if(s.level === 'doctor'){
+    title = 'Пора к терапевту';
+    text = `Физическая усталость держится почти месяц (${s.n28} из 28 дней), и отдых её не снимает. Запишись к терапевту — например, проверить общий анализ крови, щитовидку (ТТГ) и биохимию.`;
+  } else if(s.type.id === 'physical'){
+    title = `Физическая усталость: ${s.n} из ${s.w} дней`;
+    text = `Сила ${mi}+.${help} Если так продолжится ещё 1–2 недели — сходи к терапевту.`;
+  } else {
+    title = `${s.type.name} усталость: ${s.n} из ${s.w} дней`;
+    text = `Сила ${mi}+, устойчивого улучшения нет.${help}` + (s.type.id === 'emotional'
+      ? ' Если к этому добавились цинизм к работе и чувство, что ничего не получается, — это похоже на выгорание. Тогда нужен не только отдых, но и меньше нагрузки.'
+      : ' Стоит обсудить это с психотерапевтом.');
+  }
+  return `<div class="note warn" style="margin-top:28px"><h3>${title}</h3><p>${text}</p>${withPhq ? phqBlock() : ''}
+    <button class="pill" data-act="dismiss" data-id="${s.type.id}">Понятно, скрыть на неделю</button>
+    <p class="flag-l">Симптомы, при которых идти сразу, — в <button data-act="settings">настройках</button>.</p></div>`;
 }
 
 function stats(){
@@ -297,7 +392,7 @@ function stats(){
   for(const d of Object.values(S.days)){
     for(const [key,a] of Object.entries(d.actions)){
       const id = key.split('.')[0];
-      if(!a.done || !d.types[id]) continue;
+      if(!a.done || !active(d, key)) continue;
       const s = (res[id] ||= {})[key] ||= { tried:0, rated:0, score:0 };
       s.tried++; if(a.helped){ s.rated++; s.score += SCORE[a.helped]; }
     }
@@ -311,11 +406,11 @@ const I = {
   moon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 14.6A7.6 7.6 0 0 1 9.4 4.5a7.6 7.6 0 1 0 10.1 10.1z"/></svg>',
   heart:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.5s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.9c0 5.6-7.5 10-7.5 10z"/></svg>',
 };
-// Свой маскот: сонное облачко
+// Свой маскот: облачко
 function mascot(mood){
   const eyes = mood === 'worry'
     ? '<circle cx="47" cy="70" r="4.2" fill="#1D1B18"/><circle cx="73" cy="70" r="4.2" fill="#1D1B18"/><path d="M40 63l11-5M80 63l-11-5" stroke="#1D1B18" stroke-width="3" stroke-linecap="round"/>'
-    : '<path d="M41 69q6 6 12 0M67 69q6 6 12 0" fill="none" stroke="#1D1B18" stroke-width="3.6" stroke-linecap="round"/>';
+    : '<circle cx="47" cy="69" r="5.2" fill="#1D1B18"/><circle cx="73" cy="69" r="5.2" fill="#1D1B18"/><circle cx="48.9" cy="67.1" r="1.8" fill="#fff"/><circle cx="74.9" cy="67.1" r="1.8" fill="#fff"/>';
   const mouth = mood === 'worry' ? '<path d="M55 86q5-4 10 0" fill="none" stroke="#1D1B18" stroke-width="3.4" stroke-linecap="round"/>'
                                  : '<path d="M54 83q6 6 12 0" fill="none" stroke="#1D1B18" stroke-width="3.4" stroke-linecap="round"/>';
   return `<svg class="mascot" viewBox="0 0 130 120" aria-hidden="true">
@@ -326,34 +421,43 @@ function mascot(mood){
     <ellipse class="shade" cx="64" cy="96" rx="34" ry="5" fill="#4847B8" opacity=".5"/>
     <ellipse cx="38" cy="80" rx="7" ry="4.5" fill="#EF8DB4" opacity=".85"/><ellipse cx="88" cy="80" rx="7" ry="4.5" fill="#EF8DB4" opacity=".85"/>
     ${eyes}${mouth}
-    ${mood === 'worry' ? '' : '<path d="M101 18h9l-9 11h9M114 6h6l-6 7h6" fill="none" stroke="#EF8DB4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'}
   </svg>`;
 }
 
 /* ---------- Отрисовка ---------- */
-let tab = 'today', view = logicalToday();
+let tab = new Date().getHours() < 15 ? 'day' : 'today', view = logicalToday();
 const app = document.getElementById('app');
 const header = () => `<div class="bar"><div class="brand"><span class="logo">${I.moon}</span>отдых</div>
   <button class="hand-link" data-act="settings">настройки ↓</button></div>`;
 
 function render(){
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
-  app.innerHTML = header() + (tab === 'today' ? renderToday() : renderHistory());
+  app.innerHTML = header() + (tab === 'today' ? renderToday() : tab === 'day' ? renderDay() : renderHistory());
 }
 
 function chips(k, key, a){
   return `<div class="chips">${RATE.map(([v,l]) => `<button class="chip ${v} ${a.helped===v?'on':''}" data-act="rate" data-day="${k}" data-key="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
 }
 
-function bubbleText(k, d, sig, u, sel){
-  const t = logicalToday();
-  if(k !== t) return `это ${human(k)}. можно дополнить запись.`;
+function bubbleText(k, d, sig){
+  if(k !== logicalToday()) return `это ${human(k)}. можно дополнить запись.`;
   if(sig.length) return 'кажется, усталость не проходит. посмотри ниже ↓';
-  if(u) return 'привет! как там вчерашнее — помогло?';
-  if(sel.length >= 4) return 'ого, всё сразу. может, пора в отпуск?';
-  if(!sel.length) return 'привет! от чего ты сегодня устал?';
-  if(!Object.values(d.actions).some(a => a.done)) return 'отметь, что сделал для восстановления ↓';
-  return 'отдых — не лень, а обмен времени на энергию.';
+  return dailyPhrase(k);
+}
+
+function renderDay(){
+  const t = logicalToday(), d = peek(t) || {}, m = d.morning || {};
+  let h = `<div class="hero">${mascot('happy')}<div class="bubble">${dailyPhrase(t)}</div></div>
+    <h1>Днём —<br><span class="acc">береги силы.</span></h1>
+    <p class="lead">Если весь день работать без перерывов, вечерний отдых работает слабее. Вот что помогает меньше уставать.</p>
+    <div class="eyebrow">Чтобы меньше устать к вечеру</div><div class="card" style="--c:var(--social)">`;
+  recsOf('day').forEach((r, i) => {
+    h += `<div class="rec ${m[r.key]?'done':''}" style="${i === 0 ? 'border-top:0' : ''}"><div class="rec-main"><button class="rec-main" data-act="mdone" data-key="${r.key}"><span class="box">${I.tick}</span><span class="rec-t">${esc(r.text)}</span></button>${r.custom?`<button class="del" data-act="delc" data-key="${r.key}" aria-label="Удалить">✕</button>`:''}</div>
+      ${r.more ? `<details class="more"><summary>зачем ↓</summary><div>${esc(r.more)}</div></details>` : ''}</div>`;
+  });
+  h += `<div class="add"><input data-act="addc" data-id="day" placeholder="+ добавить своё" enterkeyhint="done"></div></div>
+    <p class="foot">не нужно всё сразу — выбери одно-два на сегодня.</p>`;
+  return h;
 }
 
 function renderToday(){
@@ -362,17 +466,17 @@ function renderToday(){
   const sig = k === t ? signals() : [];
   const u = unratedBefore(k);
 
-  let h = `<div class="hero">${mascot(sig.length ? 'worry' : 'sleep')}<div class="bubble">${bubbleText(k, d, sig, u, sel)}</div></div>
+  let h = `<div class="hero">${mascot(sig.length ? 'worry' : 'happy')}<div class="bubble">${bubbleText(k, d, sig)}</div></div>
     <h1>${relName(k)},<br><span class="acc">${human(k)}.</span></h1>
     <div class="pills"><button class="pill" data-act="prev">← раньше</button>
     <button class="pill" data-act="next" ${k>=t?'disabled':''}>позже →</button>
     ${k!==t?'<button class="pill solid" data-act="tonight">сегодня</button>':''}</div>`;
 
+  let phqShown = false;
   for(const s of sig){
-    const helped = s.rated ? ` Отдых помогал в ${Math.round(s.score/s.rated*100)}% оценённых случаев.` : '';
-    h += `<div class="note warn" style="margin-top:28px"><h3>${s.type.name} усталость: ${s.n} из ${s.w} дней</h3>
-      <p>Сила ${S.settings.minIntensity}+, устойчивого улучшения нет — ${s.type.whoFull}.${helped}</p>
-      <button class="pill" data-act="dismiss" data-id="${s.type.id}">Понятно, скрыть на неделю</button></div>`;
+    const withPhq = !phqShown && (s.type.id === 'emotional' || s.type.id === 'social');
+    if(withPhq) phqShown = true;
+    h += warnCard(s, withPhq);
   }
 
   if(u){
@@ -391,17 +495,18 @@ function renderToday(){
   }
   h += `</div>`;
 
-  if(sel.length >= 4){
+  if(sel.length === TYPES.length){
     h += `<div class="note all" style="margin-top:22px"><h3>Всё сразу</h3><p>Похоже, нужен не какой-то вид отдыха, а снижение нагрузки — или несколько дней без попытки быть эффективным.</p></div>`;
   }
 
   if(sel.length){
     h += `<div class="eyebrow">Что сделал для восстановления</div><div class="stack" style="gap:18px">`;
-    for(const x of sel){
-      h += `<div class="card" style="--c:${x.color}"><div class="group-h"><span class="swatch"></span><b>${x.name}</b></div><div class="hint">${x.hint}</div>`;
+    for(const x of [ANY, ...sel]){
+      h += `<div class="card" style="--c:${x.color}"><div class="group-h"><span class="swatch"></span><b>${x.name}</b></div><div class="hint">${x.hint}</div>${x.tip?`<div class="tip">☕ ${x.tip}</div>`:''}`;
       for(const r of recsOf(x.id)){
         const a = d.actions[r.key] || {};
         h += `<div class="rec ${a.done?'done':''}"><div class="rec-main"><button class="rec-main" data-act="done" data-key="${r.key}"><span class="box">${I.tick}</span><span class="rec-t">${esc(r.text)}</span></button>${r.custom?`<button class="del" data-act="delc" data-key="${r.key}" aria-label="Удалить">✕</button>`:''}</div>
+          ${r.more ? `<details class="more"><summary>${x.id==='emotional'&&r.key.endsWith('.write')?'о чём писать ↓':'как ↓'}</summary><div>${esc(r.more)}</div></details>` : ''}
           ${a.done ? chips(k, r.key, a) : ''}</div>`;
       }
       h += `<div class="add"><input data-act="addc" data-id="${x.id}" placeholder="+ добавить своё" enterkeyhint="done"></div></div>`;
@@ -436,7 +541,7 @@ function renderHistory(){
 
   const st = stats(); let any = false;
   h += `<div class="eyebrow">Помогает лично тебе</div><div class="stack" style="gap:18px">`;
-  for(const x of TYPES){
+  for(const x of [ANY, ...TYPES]){
     const rows = Object.entries(st[x.id]||{}).sort((a,b) => (b[1].rated?b[1].score/b[1].rated:-1) - (a[1].rated?a[1].score/a[1].rated:-1));
     if(!rows.length) continue; any = true;
     h += `<div class="card pad" style="--c:${x.color}"><div class="group-h" style="padding:0 0 8px"><span class="swatch"></span><b>${x.name}</b></div>`;
@@ -469,8 +574,17 @@ function openSettings(){
     <div class="stack"><button class="btn" data-act="export">Сохранить резервную копию →</button>
     <button class="btn ghost" data-act="import">Восстановить из копии</button></div>
     <p class="small">Всё хранится только на этом телефоне. Если удалить иконку с экрана «Домой», данные пропадут. Последняя копия: <b>${S.lastExport ? human(S.lastExport) : 'ещё не было'}</b>.</p>
+    <div class="eyebrow">Когда обращаться сразу</div>
+    <div class="card pad flags"><ul>
+      <li><b>Мысли о самоубийстве или о том, чтобы навредить себе</b> — в тот же день: к врачу, психотерапевту или 112.</li>
+      <li>Похудание без причины, температура, ночная потливость, увеличенные лимфоузлы.</li>
+      <li>Новая сильная головная боль, нарушение зрения, онемение или слабость в руке или ноге.</li>
+      <li>Боль в груди, одышка, обмороки.</li>
+      <li>Храп с остановками дыхания во сне.</li>
+      <li>Не получается работать или заботиться о себе.</li>
+    </ul><p class="small" style="margin:10px 0 0">В Португалии: 112 — экстренно, SNS 24 (808 24 24 24) — медицинская линия.</p></div>
     <div class="eyebrow">О приложении</div>
-    <p class="small" style="margin-top:0">Типы усталости и рекомендации — практическая карта из подкаста «Познай самого себя» (Анна Иванникова), а не медицинская классификация. Записей: ${Object.keys(S.days).length}.</p>`;
+    <p class="small" style="margin-top:0">Типы усталости — практическая карта из подкаста «Познай самого себя» (Анна Иванникова). Рекомендации и пороги сверены с исследованиями по восстановлению и клиническими руководствами (NICE, AAFP, PHQ-2), но приложение не заменяет врача. Записей: ${Object.keys(S.days).length}.</p>`;
   sheet.classList.add('open'); sheetBg.classList.add('open');
 }
 function closeSettings(){ sheet.classList.remove('open'); sheetBg.classList.remove('open'); }
@@ -490,7 +604,7 @@ document.getElementById('importFile').onchange = async e => {
     const d = JSON.parse(await f.text());
     if(!d || typeof d.days !== 'object') throw 0;
     if(!confirm(`Заменить текущие данные копией (${Object.keys(d.days).length} записей)?`)) return;
-    S = { ...DEFAULTS, ...d, settings:{ ...DEFAULTS.settings, ...(d.settings||{}) } }; save(); closeSettings(); render();
+    S = migrate({ ...DEFAULTS, ...d, settings:{ ...DEFAULTS.settings, ...(d.settings||{}) } }); save(); closeSettings(); render();
   }catch(_){ alert('Не похоже на файл резервной копии.'); }
   e.target.value = '';
 };
@@ -505,6 +619,7 @@ document.addEventListener('click', e => {
     case 'prev': view = addDays(view,-1); render(); break;
     case 'next': if(view < logicalToday()){ view = addDays(view,1); render(); } break;
     case 'tonight': view = logicalToday(); render(); break;
+    case 'mdone': { const d = day(logicalToday()), m = d.morning ||= {}; if(m[el.dataset.key]) delete m[el.dataset.key]; else m[el.dataset.key] = true; save(); render(); break; }
     case 'type': {
       if(e.target.closest('.seg')) return;
       const d = day(k), id = el.dataset.id;
@@ -514,6 +629,10 @@ document.addEventListener('click', e => {
     case 'done': { const d = day(k), a = d.actions[el.dataset.key] ||= {}; a.done = !a.done; if(!a.done) delete d.actions[el.dataset.key]; save(); render(); break; }
     case 'rate': { const d = day(el.dataset.day), a = d.actions[el.dataset.key] ||= { done:true }; a.helped = a.helped === el.dataset.v ? null : el.dataset.v; save(); render(); break; }
     case 'delc': { const [id,,cid] = el.dataset.key.split('.'); S.custom[id] = (S.custom[id]||[]).filter(c => c.id !== cid); save(); render(); break; }
+    case 'phq': {
+      S.phqDraft['q'+el.dataset.q] = +el.dataset.v;
+      if(S.phqDraft.q0 != null && S.phqDraft.q1 != null){ S.phq = { date:logicalToday(), score:S.phqDraft.q0 + S.phqDraft.q1 }; S.phqDraft = {}; }
+      save(); render(); break; }
     case 'dismiss': { S.dismissed[el.dataset.id] = addDays(logicalToday(), 7); save(); render(); break; }
     case 'open': { view = el.dataset.day; tab = 'today'; render(); scrollTo(0,0); break; }
     case 'settings': openSettings(); break;
